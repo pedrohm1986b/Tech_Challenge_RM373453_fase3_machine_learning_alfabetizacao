@@ -1,0 +1,14 @@
+# Dependências do projeto (Tech Challenge Fase 3)
+# Instalação: pip install -r requirements.txt
+
+pandas
+numpy
+pyarrow                          # leitura Parquet das camadas do lake
+scikit-learn                     # pipeline de machine learning
+matplotlib                       # visualizações
+seaborn                          # visualizações estatísticas da EDA
+shap                             # interpretabilidade dos modelos
+pandas-gbq                       # leitura da camada Gold via BigQuery
+pydata-google-auth               # autorização da conta Google pelo navegador
+google-cloud-storage             # acesso ao data lake (GCS)
+gcsfs                            # permite ao pandas ler gs:// diretamente

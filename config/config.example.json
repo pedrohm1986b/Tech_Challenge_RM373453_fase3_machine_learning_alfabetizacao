@@ -1,0 +1,5 @@
+{
+  "projeto_gcp": "SEU_PROJETO_GCP",
+  "bucket_lake": "SEU_BUCKET_DO_LAKE",
+  "regiao": "us-central1"
+}

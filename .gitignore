@@ -1,0 +1,25 @@
+# Configuração pessoal (contém IDs de projeto e bucket do executor)
+config/config.json
+
+# Dados: o repositório versiona código; os dados vivem no data lake
+data/*
+!data/.gitkeep
+*.parquet
+*.csv
+*.xlsx
+
+# Artefatos de modelo
+*.pkl
+*.joblib
+models/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Sistema
+.DS_Store
+Thumbs.db
