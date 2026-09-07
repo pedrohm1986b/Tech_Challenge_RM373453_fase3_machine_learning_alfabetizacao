@@ -1,0 +1,54 @@
+variavel,bloco,fonte,referencia,natureza,descricao,formula,tipo,preenchimento,distintos
+ano,chave,"Silver, camada de alunos",2024,direta,ciclo da avaliação,,Int64,100.0,1
+id_municipio,chave,"Silver, camada de alunos",2024,direta,código IBGE do município,,str,100.0,5517
+alvo,resposta,"Silver, camada de alunos",2024,derivada,1 se o aluno foi classificado como alfabetizado,proficiência >= 743,int64,100.0,2
+peso_aluno,ponderação,"Silver, camada de alunos",2024,direta,"peso amostral calibrado pelo INEP, reservado à ponderação",,float64,100.0,540
+particao,controle,construída neste notebook,2024,derivada,"conjunto de destino: treino, validação ou teste",sorteio por município,str,100.0,3
+rede_nome,aluno,"Silver, camada de alunos",2024,direta,rede de ensino que atende o aluno,,str,100.0,3
+rede_taxa_ant,desempenho anterior,"Silver, indicador municipal por rede",2023,direta,taxa de alfabetização da rede do aluno no município,,float64,98.1,4059
+rede_media_portugues_ant,desempenho anterior,"Silver, indicador municipal por rede",2023,direta,proficiência média em português da rede,,float64,98.1,6397
+uf_rede_taxa_ant,desempenho anterior,"Silver, indicador municipal por rede",2023,derivada,benchmark: mediana da mesma rede entre os municípios da UF,mediana por UF e rede,float64,98.1,46
+rede_vs_uf,desempenho anterior,"Silver, indicador municipal por rede",2023,derivada,posição da rede diante do padrão do seu estado,rede_taxa_ant - uf_rede_taxa_ant,float64,98.1,5245
+rede_vs_municipio,desempenho anterior,"Silver, indicador municipal por rede",2023,derivada,posição da rede diante do seu município,rede_taxa_ant - mun_taxa_ant,float64,89.2,1690
+mun_taxa_ant,desempenho anterior,"Gold, indicador municipal",2023,direta,taxa de alfabetização do município na rede pública,,float64,89.2,3517
+mun_participacao_ant,desempenho anterior,"Gold, indicador municipal",2023,direta,percentual de alunos presentes na avaliação anterior,,float64,76.9,2483
+mun_taxa_ajustada_ant,desempenho anterior,"Gold, indicador municipal",2023,derivada,taxa com ausentes contados como não alfabetizados,mun_taxa_ant * mun_participacao_ant / 100,float64,76.9,4811
+mun_alunos_ant,desempenho anterior,"Gold, indicador municipal",2023,direta,alunos presentes no município no ciclo anterior,,float64,76.9,905
+mun_meta_ciclo,desempenho anterior,"Gold, metas pactuadas","2024, pactuada previamente",direta,meta de alfabetização pactuada para o ciclo corrente,,float64,86.5,2592
+mun_gap_meta,desempenho anterior,"Gold, metas pactuadas",2023 e 2024,derivada,esforço requerido para atingir a meta,mun_meta_ciclo - mun_taxa_ant,float64,86.5,2170
+sigla_uf,território,"IBGE, diretório de municípios",estável,direta,unidade da federação,,str,89.2,24
+nome_regiao,território,"IBGE, diretório de municípios",estável,direta,região do país,,str,89.2,5
+rede_porte_atual,porte e oferta,"Silver, camada de alunos","2024, cadastro prévio",derivada,alunos avaliáveis na rede do aluno no município,contagem de matriculados,int64,100.0,1066
+mun_porte_atual,porte e oferta,"Silver, camada de alunos","2024, cadastro prévio",derivada,alunos avaliáveis no município,contagem de matriculados,int64,100.0,1051
+rede_peso_no_municipio,porte e oferta,"Silver, camada de alunos",2024,derivada,fração dos alunos do município atendida pela rede,rede_porte_atual / mun_porte_atual,float64,100.0,1809
+esc_quantidade,porte e oferta,"INEP, Censo Escolar",2023,direta,escolas da rede no município,,Int64,100.0,199
+esc_salas_por_aluno,porte e oferta,"INEP, Censo Escolar",2023,proxy,"densidade física: espaço disponível por aluno, na falta de metragem",salas em uso / rede_porte_atual,Float64,100.0,4199
+turma_media_alunos,porte e oferta,"INEP, Censo Escolar, turmas",2023,direta,"tamanho médio da turma do 2º ano, a série avaliada",,float64,100.0,251
+esc_pct_rural,infraestrutura,"INEP, Censo Escolar",2023,direta,percentual de escolas da rede em zona rural,,float64,100.0,1
+esc_pct_agua_rede,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas com abastecimento de água pela rede pública,,float64,100.0,697
+esc_pct_esgoto_rede,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas com esgotamento sanitário pela rede pública,,float64,100.0,641
+esc_pct_energia_rede,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas com energia elétrica da rede pública,,float64,100.0,570
+esc_pct_internet,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas com acesso à internet,,float64,100.0,625
+esc_pct_biblioteca,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas com biblioteca,,float64,100.0,522
+esc_pct_lab_informatica,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas com laboratório de informática,,float64,100.0,508
+esc_pct_quadra,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas com quadra de esportes,,float64,100.0,557
+esc_pct_alimentacao,infraestrutura,"INEP, Censo Escolar",2023,direta,escolas que oferecem alimentação aos alunos,,float64,100.0,518
+esc_pct_transporte,infraestrutura,"INEP, Censo Escolar",2023,proxy,"dependência de transporte escolar, aproximação da distância entre aluno e escola",alunos transportados / rede_porte_atual,Float64,100.0,642
+esc_pct_coordenador,profissionais,"INEP, Censo Escolar",2023,direta,escolas com coordenador pedagógico,,float64,100.0,513
+esc_pct_psicologo,profissionais,"INEP, Censo Escolar",2023,direta,escolas com psicólogo,,float64,100.0,371
+esc_pct_assistente_social,profissionais,"INEP, Censo Escolar",2023,direta,escolas com assistente social,,float64,100.0,297
+mun_pib_per_capita,socioeconômico,"IBGE, PIB municipal",2021,derivada,riqueza produzida por habitante,PIB / população,float64,100.0,5186
+mun_pct_agropecuaria,socioeconômico,"IBGE, PIB municipal",2021,proxy,"peso da agropecuária, aproximação do caráter rural da economia",valor adicionado agropecuário / valor adicionado total,float64,100.0,745
+mun_pct_servicos,socioeconômico,"IBGE, PIB municipal",2021,proxy,"peso dos serviços, aproximação do caráter urbano da economia",valor adicionado de serviços / valor adicionado total,float64,100.0,651
+mun_populacao,socioeconômico,"IBGE, estimativa populacional",2021,direta,população do município,,Int64,100.0,5064
+mun_idhm,socioeconômico,"PNUD, Atlas do Desenvolvimento Humano",2010,direta,índice de desenvolvimento humano municipal,,float64,100.0,349
+mun_idhm_educacao,socioeconômico,"PNUD, Atlas do Desenvolvimento Humano",2010,direta,dimensão educação do IDHM,,float64,100.0,464
+mun_idhm_renda,socioeconômico,"PNUD, Atlas do Desenvolvimento Humano",2010,direta,dimensão renda do IDHM,,float64,100.0,386
+mun_renda_per_capita,socioeconômico,"PNUD, Atlas do Desenvolvimento Humano",2010,direta,renda domiciliar por habitante,,float64,100.0,5303
+mun_gini,socioeconômico,"PNUD, Atlas do Desenvolvimento Humano",2010,direta,desigualdade na distribuição da renda,,float64,100.0,50
+mun_analfabetismo_adulto,socioeconômico,"PNUD, Atlas do Desenvolvimento Humano",2010,proxy,"analfabetismo entre adultos, aproximação do capital cultural do domicílio",,float64,100.0,2777
+mun_expectativa_estudo,socioeconômico,"PNUD, Atlas do Desenvolvimento Humano",2010,direta,expectativa de anos de estudo,,float64,100.0,576
+mun_ivs,socioeconômico,"IPEA, Atlas da Violência",2010,direta,índice de vulnerabilidade social,,float64,100.0,4772
+mun_ivs_infraestrutura,socioeconômico,"IPEA, Atlas da Violência",2010,direta,vulnerabilidade de infraestrutura urbana,,float64,100.0,5173
+mun_ivs_capital_humano,socioeconômico,"IPEA, Atlas da Violência",2010,direta,vulnerabilidade de capital humano,,float64,100.0,5161
+mun_taxa_homicidio,socioeconômico,"DataSUS, Sistema de Informação sobre Mortalidade",2019,proxy,"óbitos por agressão por cem mil habitantes, aproximação da exposição à violência",óbitos CID X85 a Y09 * 100000 / população,Float64,100.0,733
