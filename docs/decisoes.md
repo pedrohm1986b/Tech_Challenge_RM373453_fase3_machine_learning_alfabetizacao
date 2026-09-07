@@ -90,6 +90,38 @@ A numeração recomeça nesta fase; as decisões da fase anterior (D-001 a D-014
 
 ---
 
+## D-006 · Seleção de variáveis guiada por hipóteses declaradas
+
+**Data:** 07/09/2026 · **Etapa:** Base analítica
+
+**Decisão:** toda variável explicativa da base precisa responder a uma hipótese declarada previamente em [`hipoteses.md`](hipoteses.md), com mecanismo proposto, previsão e critério de falseamento escritos **antes** da medição. O vínculo é materializado como a coluna `hipotese` do dicionário de dados, e uma trava no código interrompe a execução se alguma variável ficar sem hipótese atribuída.
+
+**Contexto:** a primeira rodada de enriquecimento reuniu trinta e uma variáveis externas escolhidas por plausibilidade. Ao mapeá-las contra hipóteses, ficou evidente que algumas haviam entrado sem mecanismo articulado: PIB per capita, renda e IDHM não cabiam em nenhuma das hipóteses formuladas, e precisaram de uma nova (H9) escrita para acomodá-las. Antes disso, eu vinha produzindo diagnósticos avulsos sobre a base sem hipótese que os justificasse.
+
+**Justificativa:** análise exploratória sem hipótese prévia é pescaria: com quarenta e nove variáveis e 1,85 milhão de observações, sempre haverá algum padrão estatisticamente notável, e a interpretação passa a ser construída depois de ver o resultado. Declarar antes o que se espera, e o que falsearia a expectativa, é o que separa achado de coincidência garimpada. Há um caso concreto disso registrado na H4: anotei antes de medir que um gradiente positivo para tamanho de turma deve ser lido como marcador de urbanidade, e não como "turma grande ajuda" — justamente para não reinterpretar o sinal depois de vê-lo.
+
+O ganho prático é duplo. A análise exploratória passa a se organizar por hipótese em vez de por tipo de gráfico, e cada resultado remete à pergunta que responde. E as hipóteses ficam disponíveis para a etapa de interpretabilidade: a importância das variáveis no modelo pode ser lida contra o que se esperava, em vez de narrada a posteriori.
+
+**Consequência registrada:** as nove hipóteses cobrem quarenta variáveis; as nove restantes são controles de escala, território e rede, rotulados como tal. A H8 (inércia territorial) foi declarada explicitamente como hipótese **concorrente**: se ela dominar e as demais não acrescentarem poder preditivo, o resultado será reportado como achado, e não dissolvido na métrica agregada.
+
+---
+
+## D-007 · Exclusão da distribuição por níveis de proficiência, por vazamento
+
+**Data:** 07/09/2026 · **Etapa:** Base analítica
+
+**Decisão:** as nove colunas `proporcao_aluno_nivel_0` a `proporcao_aluno_nivel_8` da camada Silver, que descrevem a distribuição dos alunos pelos níveis de proficiência, **não** entram na base analítica.
+
+**Contexto:** essas colunas descrevem a forma da distribuição de desempenho da rede, e não apenas a sua média. Seriam um enriquecimento valioso do contexto: duas redes com a mesma taxa de alfabetização podem ter distribuições muito distintas, uma concentrada perto do corte e outra polarizada.
+
+**Justificativa:** a verificação nos dados mostrou que elas existem **apenas para o ciclo de 2024**, com zero linhas preenchidas em 2023. Como o contexto do modelo é defasado por construção, usá-las significaria descrever o aluno com a distribuição de desempenho do próprio ciclo que se quer prever, calculada a partir das notas dos próprios alunos que se está tentando classificar. É vazamento tão direto quanto usar a proficiência, apenas menos evidente, porque chega disfarçado de "contexto da rede".
+
+**Registro do método:** este caso é a evidência concreta do tratamento de vazamento que o trabalho exige. A defesa não foi uma declaração genérica de cuidado: foram nove variáveis atraentes, identificadas, verificadas contra a disponibilidade temporal e descartadas por essa razão. O mesmo critério da D-004 se aplica aqui, na direção oposta: o que decide não é o ano da fonte, e sim o momento em que a informação passa a existir.
+
+**Consequência registrada:** o campo `meta_taxa` da mesma tabela também só existe em 2024, e é obtido da camada Gold, que é a sua fonte curada.
+
+---
+
 ## Decisões pendentes
 
 Os identificadores são atribuídos apenas quando a decisão é tomada, para evitar renumerações.
@@ -102,3 +134,4 @@ Os identificadores são atribuídos apenas quando a decisão é tomada, para evi
 | Algoritmo de referência e critério de escolha | Modelagem |
 | Métrica principal de avaliação | Avaliação |
 | Fontes externas de enriquecimento a incorporar | Preparação de dados |
+| Conjunto final de variáveis, após diagnóstico de redundância | Análise exploratória |
