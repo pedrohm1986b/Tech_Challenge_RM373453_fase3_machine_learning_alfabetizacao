@@ -8,6 +8,10 @@ data/*
 *.csv
 *.xlsx
 
+# Excecao: os relatorios de reports/ sao documentacao gerada pelo codigo,
+# nao dados. Ficam versionados para leitura direta no repositorio.
+!reports/*.csv
+
 # Artefatos de modelo
 *.pkl
 *.joblib

@@ -74,6 +74,22 @@ A numeração recomeça nesta fase; as decisões da fase anterior (D-001 a D-014
 
 ---
 
+## D-005 · Fontes externas consultadas na origem, com industrialização recomendada
+
+**Data:** 12/07/2026 · **Etapa:** Base analítica
+
+**Decisão:** as fontes públicas usadas no enriquecimento (Censo Escolar, PIB municipal, Atlas do Desenvolvimento Humano, Atlas da Violência e Sistema de Informação sobre Mortalidade) são consultadas diretamente na origem, com a agregação por município e rede feita na própria consulta, e o resultado agregado é guardado em uma área de modelagem do data lake. Elas **não** passam pelas camadas do medalhão nesta fase. Fica registrada a recomendação de incorporá-las à arquitetura medalhão quando forem promovidas a uso recorrente.
+
+**Contexto:** o data lake construído na fase anterior organiza as fontes em camadas: a Bronze preserva o dado bruto como chegou, e a Silver entrega o dado curado e integrado. As fontes externas deste projeto seguem caminho diferente: são lidas da origem, agregadas na consulta e materializadas já no formato de uso.
+
+**Justificativa:** esta etapa é de **prototipação analítica**, e o propósito das fontes externas é responder a uma pergunta ainda em aberto, se elas carregam informação útil para prever a alfabetização. Industrializar a ingestão de cinco fontes antes de saber quais permanecerão no modelo final significaria construir infraestrutura para dados que podem ser descartados na seleção de variáveis. O resultado agregado é materializado no lake e reutilizado nas execuções seguintes, o que preserva a reprodutibilidade sem repetir o custo de consulta. A separação de papéis é a usual entre ciência e engenharia de dados: a análise demonstra o valor da variável, a engenharia a torna um ativo permanente.
+
+**Recomendação registrada para a evolução do projeto:** as fontes que se mostrarem relevantes na análise de importância dos modelos devem ser incorporadas ao data lake pelo time de engenharia de dados, seguindo o padrão da fase anterior. A ingestão levaria o dado bruto no grão de origem para a camada Bronze, com carimbo de ingestão e reconciliação de contagens; a agregação por município e rede, hoje embutida na consulta, passaria a ser uma transformação explícita na camada Silver. Isso preservaria o grão original, permitindo reagregações futuras sem novo acesso à fonte, e tornaria auditável a lógica de transformação.
+
+**Alternativas consideradas:** ingerir as cinco fontes na camada Bronze antes de conhecer sua utilidade (descartada pelo custo de construir infraestrutura para variáveis possivelmente descartáveis); consultar a origem a cada execução, sem materializar (descartada por comprometer a reprodutibilidade e repetir custo de leitura).
+
+---
+
 ## Decisões pendentes
 
 Os identificadores são atribuídos apenas quando a decisão é tomada, para evitar renumerações.
