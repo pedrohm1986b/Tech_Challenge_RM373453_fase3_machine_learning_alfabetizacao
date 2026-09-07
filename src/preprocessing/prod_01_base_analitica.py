@@ -101,7 +101,7 @@ FAMILIAS = {
         "rede_porte_atual", "mun_porte_atual", "rede_peso_no_municipio",
         "esc_quantidade", "esc_salas_por_aluno", "turma_media_alunos"],
     "infraestrutura escolar": [
-        "esc_pct_rural", "esc_pct_agua_rede", "esc_pct_esgoto_rede",
+        "esc_pct_rural", "esc_pct_alunos_zona_rural", "esc_pct_agua_rede", "esc_pct_esgoto_rede",
         "esc_pct_energia_rede", "esc_pct_internet", "esc_pct_biblioteca",
         "esc_pct_lab_informatica", "esc_pct_quadra", "esc_pct_alimentacao",
         "esc_pct_transporte"],
@@ -193,7 +193,12 @@ METADADOS_VARIAVEIS = [
      str(CICLO_ANTERIOR), "direta", "tamanho médio da turma do 2º ano, a série avaliada", ""),
 
     ("esc_pct_rural", "infraestrutura", "INEP, Censo Escolar", str(CICLO_ANTERIOR),
-     "direta", "percentual de escolas da rede em zona rural", ""),
+     "derivada", "alunos do 2º ano que estudam em escolas de zona rural",
+     "matriculas do 2º ano em escolas rurais / matriculas do 2º ano"),
+    ("esc_pct_alunos_zona_rural", "infraestrutura", "INEP, Censo Escolar",
+     str(CICLO_ANTERIOR), "proxy",
+     "alunos que residem em zona rural, aproximação da distância vivida até a escola",
+     "matriculas com residência rural / total de matriculas"),
     ("esc_pct_agua_rede", "infraestrutura", "INEP, Censo Escolar", str(CICLO_ANTERIOR),
      "direta", "escolas com abastecimento de água pela rede pública", ""),
     ("esc_pct_esgoto_rede", "infraestrutura", "INEP, Censo Escolar", str(CICLO_ANTERIOR),
@@ -259,6 +264,44 @@ METADADOS_VARIAVEIS = [
 COLUNAS_META = ["variavel", "bloco", "fonte", "referencia", "natureza",
                 "descricao", "formula"]
 
+# Cada variavel foi eleita para responder a uma hipotese, documentada em
+# docs/hipoteses.md. O mapeamento abaixo e a ponte entre o dicionario e o
+# raciocinio: e ele que organiza a analise exploratoria.
+HIPOTESES = {
+    "H1 deslocamento e desgaste": [
+        "esc_pct_alunos_zona_rural", "esc_pct_rural", "esc_pct_transporte",
+        "mun_pct_agropecuaria", "mun_pct_servicos"],
+    "H2 infraestrutura basica": [
+        "esc_pct_agua_rede", "esc_pct_esgoto_rede", "esc_pct_energia_rede",
+        "esc_pct_alimentacao"],
+    "H3 recursos pedagogicos": [
+        "esc_pct_biblioteca", "esc_pct_lab_informatica", "esc_pct_quadra",
+        "esc_pct_internet"],
+    "H4 densidade da sala": ["turma_media_alunos", "esc_salas_por_aluno"],
+    "H5 suporte especializado": [
+        "esc_pct_coordenador", "esc_pct_psicologo", "esc_pct_assistente_social"],
+    "H6 capital cultural": [
+        "mun_analfabetismo_adulto", "mun_expectativa_estudo", "mun_idhm_educacao"],
+    "H7 vulnerabilidade e violencia": [
+        "mun_ivs", "mun_ivs_infraestrutura", "mun_ivs_capital_humano",
+        "mun_taxa_homicidio", "mun_gini"],
+    "H8 inercia territorial": [
+        "rede_taxa_ant", "mun_taxa_ant", "rede_media_portugues_ant",
+        "uf_rede_taxa_ant", "rede_vs_uf", "rede_vs_municipio",
+        "mun_taxa_ajustada_ant", "mun_participacao_ant", "mun_meta_ciclo",
+        "mun_gap_meta"],
+    "H9 recursos materiais": [
+        "mun_pib_per_capita", "mun_renda_per_capita", "mun_idhm_renda",
+        "mun_idhm"],
+    "controle de escala": [
+        "rede_porte_atual", "mun_porte_atual", "rede_peso_no_municipio",
+        "esc_quantidade", "mun_populacao", "mun_alunos_ant"],
+    "controle territorial": ["sigla_uf", "nome_regiao"],
+    "controle do aluno": ["rede_nome"],
+    "nao aplicavel": ["ano", "id_municipio", "alvo", "peso_aluno", "particao"],
+}
+VARIAVEL_HIPOTESE = {v: h for h, vs in HIPOTESES.items() for v in vs}
+
 
 # ---------------------------------------------------------------------------
 # Consultas às fontes públicas (decisão D-005)
@@ -267,7 +310,13 @@ CONSULTAS = {
     "censo_escolar": f"""
         SELECT id_municipio, rede,
                COUNT(*) AS esc_quantidade,
-               ROUND(100 * AVG(IF(tipo_localizacao = 'Rural', 1, 0)), 1) AS esc_pct_rural,
+               ROUND(100 * SAFE_DIVIDE(
+                   SUM(IF(tipo_localizacao = '2', quantidade_matricula_fundamental_2_ano, 0)),
+                   SUM(quantidade_matricula_fundamental_2_ano)), 1) AS esc_pct_rural,
+               ROUND(100 * SAFE_DIVIDE(
+                   SUM(quantidade_matricula_zona_residencia_rural),
+                   SUM(quantidade_matricula_zona_residencia_rural)
+                   + SUM(quantidade_matricula_zona_residencia_urbana)), 1) AS esc_pct_alunos_zona_rural,
                ROUND(100 * AVG(COALESCE(agua_rede_publica, 0)), 1) AS esc_pct_agua_rede,
                ROUND(100 * AVG(COALESCE(esgoto_rede_publica, 0)), 1) AS esc_pct_esgoto_rede,
                ROUND(100 * AVG(COALESCE(energia_rede_publica, 0)), 1) AS esc_pct_energia_rede,
@@ -384,12 +433,21 @@ class Lake:
             f"{area}/{tabela}/{particao}/{tabela}.parquet")
         return pd.read_parquet(io.BytesIO(blob.download_as_bytes()), **kwargs)
 
-    def fonte_externa(self, nome: str, refazer: bool = False) -> pd.DataFrame:
-        """Consulta uma fonte pública uma única vez e a mantém no lake."""
+    def fonte_externa(self, nome: str, refazer: bool = False,
+                      colunas: list[str] | None = None) -> pd.DataFrame:
+        """Consulta uma fonte pública uma única vez e a mantém no lake.
+
+        O cache é compartilhado com o notebook de desenvolvimento. Se o que
+        está gravado não tiver as colunas esperadas, a consulta é refeita.
+        """
         caminho = f"ml/externas/{nome}/{nome}.parquet"
         blob = self.cliente.bucket(self.bucket).blob(caminho)
+        dados = None
         if blob.exists() and not refazer:
             dados = pd.read_parquet(io.BytesIO(blob.download_as_bytes()))
+            if [c for c in (colunas or []) if c not in dados.columns]:
+                dados = None
+        if dados is not None:
             origem = "cache"
         else:
             dados = pandas_gbq.read_gbq(CONSULTAS[nome],
@@ -495,11 +553,14 @@ def montar_porte(df_alunos: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
 def preparar_externas(lake: Lake, refazer: bool) -> dict:
     """Traz as fontes públicas e as ajusta ao vocabulário da base (D-005)."""
-    censo = lake.fonte_externa("censo_escolar", refazer)
+    censo = lake.fonte_externa("censo_escolar", refazer,
+                               ["esc_pct_rural", "esc_pct_alunos_zona_rural",
+                                "esc_salas", "esc_alunos_transporte"])
     censo["rede_nome"] = censo["rede"].map({"2": "Estadual", "3": "Municipal"})
     censo = censo.drop(columns="rede")
 
-    turmas = lake.fonte_externa("turmas_2ano", refazer)
+    turmas = lake.fonte_externa("turmas_2ano", refazer,
+                                ["turma_media_alunos"])
     economia = lake.fonte_externa("economia_municipal", refazer)
     desenvolvimento = lake.fonte_externa("desenvolvimento_humano", refazer)
 
@@ -568,6 +629,14 @@ def auditar(abt: pd.DataFrame) -> None:
         sys.exit(f"Auditoria reprovada: variaveis sem justificativa temporal: "
                  f"{suspeitas}")
 
+    # Uma variavel constante nao carrega informacao e, quase sempre, denuncia
+    # filtro que nunca casou na consulta de origem. Foi assim que o percentual
+    # de escolas rurais chegou zerado a primeira versao da base.
+    constantes = [c for c in FEATURES if abt[c].nunique(dropna=True) <= 1]
+    if constantes:
+        sys.exit(f"Auditoria reprovada: variaveis sem variacao: {constantes}. "
+                 "Verifique o dominio dos filtros na consulta de origem.")
+
     numericas = [c for c in FEATURES if pd.api.types.is_numeric_dtype(abt[c])]
     correl = abt[numericas + ["alvo"]].corr()["alvo"].drop("alvo")
     extremas = correl[correl.abs() > 0.9]
@@ -602,6 +671,12 @@ def particionar(abt: pd.DataFrame) -> pd.DataFrame:
 def publicar_dicionario(df_abt: pd.DataFrame) -> Path:
     """Dicionário de dados: bloco, fonte, referência, natureza e fórmula."""
     dicionario = pd.DataFrame(METADADOS_VARIAVEIS, columns=COLUNAS_META)
+    dicionario["hipotese"] = dicionario["variavel"].map(VARIAVEL_HIPOTESE)
+    sem_hipotese = dicionario.loc[dicionario["hipotese"].isna(), "variavel"].tolist()
+    if sem_hipotese:
+        sys.exit(
+            f"Variaveis sem hipotese declarada: {sem_hipotese}. "
+            "Toda variavel precisa responder a uma hipotese de docs/hipoteses.md.")
 
     na_tabela = [c for c in df_abt.columns if c not in METADADOS_GRAVACAO]
     sem_descricao = [v for v in na_tabela if v not in set(dicionario["variavel"])]
@@ -649,10 +724,11 @@ def main() -> int:
     print(f"        {len(CONTRATO)} tabelas conferidas")
 
     print("[2/7] isolando a populacao modelavel...", flush=True)
+    # a proficiencia permanece no contrato, como prova de integridade do lake,
+    # mas nao e lida: o alvo vem de `alfabetizado` e usa-la seria vazamento
     df_alunos = lake.ler("silver", "alunos",
                          columns=["ano", "id_municipio", "rede_nome",
-                                  "presente", "alfabetizado", "proficiencia",
-                                  "peso_aluno"])
+                                  "presente", "alfabetizado", "peso_aluno"])
     populacao = isolar_populacao(df_alunos)
     print(f"        {len(populacao):,} alunos presentes de "
           f"{len(df_alunos):,} avaliaveis")
