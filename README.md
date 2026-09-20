@@ -140,8 +140,6 @@ A **rede-município** é o conjunto de escolas da rede municipal, ou da rede est
 
 A exploração (`desenv_02`) trabalhou o indicador no grão do município e do aluno, e produziu as hipóteses declaradas em [`docs/hipoteses.md`](docs/hipoteses.md), que guiaram o enriquecimento da base.
 
-![Taxa de alfabetização por UF](images/eda_mapa_alfabetizacao_uf.png)
-
 A exploração (`desenv_02`) não foi um inventário de gráficos: foi uma **cadeia de perguntas**, em que cada resposta determinou a seguinte e, no fim, o desenho da modelagem.
 
 **Como é a resposta que vamos prever?** Ela não é uma observação direta: nasce de um corte na proficiência, em que quem alcança 743 pontos na escala do 2º ano é classificado como alfabetizado. E a linha cai praticamente sobre a moda da distribuição.
@@ -150,17 +148,25 @@ A exploração (`desenv_02`) não foi um inventário de gráficos: foi uma **cad
 
 Isso tem consequência imediata: **8,3% dos alunos estão a menos de 5 pontos da linha**, 16,6% a menos de 10 e 32,4% a menos de 20. Para essa parcela, a diferença entre as duas classes é ruído. Foi daí que veio a decisão de não usar acurácia como métrica principal, e sim ler o modelo pela probabilidade.
 
-**Dá para distinguir duas crianças?** Não. Apenas 9,4% da variação do resultado individual está entre municípios; os outros **90,6% acontecem entre alunos do mesmo município**, e nenhuma variável desta base alcança essa diferença. O teto da tarefa já estava ali, esperando para ser medido.
+**Dá para distinguir duas crianças?** Não. Apenas 9,4% da variação do resultado individual está entre municípios; os outros **90,6% acontecem entre alunos do mesmo município**, e nenhuma variável desta base alcança essa diferença. Isso estabelece um teto, marcado pela linha tracejada no gráfico abaixo: nenhuma variável pode ultrapassá-lo.
+
+![Correlação de cada variável com a resposta](images/eda_correlacao_resposta.png)
+
+O mesmo gráfico adianta as duas respostas seguintes: as barras cinzas no topo são as medidas do ano anterior, e a primeira barra azul, logo abaixo delas, é a **oferta de pré-escola**, a variável acionável mais bem posicionada.
 
 **Se não é o aluno, o que tem sinal?** O território. A amplitude entre UFs chega a **49,3 pontos**, de 36,0% na Bahia a 85,3% no Ceará, e dentro do estado as cidades grandes puxam o resultado para baixo: a capital paulista, com 94 mil alunos, alfabetiza 56,6%, menos que 7 em cada 10 municípios paulistas. A unidade que carrega sinal é a rede dentro do município.
 
-**E o que explica o território?** Ele mesmo, no ano anterior: a correlação entre as taxas municipais de 2023 e 2024 é de **0,665**. A exceção confirma a leitura: o Rio Grande do Sul cai 18,8 pontos em 2024, o ano das enchentes. Por isso a inércia entrou como referência a superar, e não como alavanca de política.
+![Taxa de alfabetização por UF](images/eda_mapa_alfabetizacao_uf.png)
 
-**O que sobra para a política?** Entre os fatores que um gestor move, a **oferta de pré-escola** se destaca, separando os alunos em 18,9 pontos entre o primeiro e o último quintil, bem à frente dos demais.
+**E o que explica o território?** Ele mesmo, no ano anterior: a correlação entre as taxas municipais de 2023 e 2024 é de **0,665**. A exceção confirma a leitura: o Rio Grande do Sul cai 18,8 pontos em 2024, o ano das enchentes.
+
+![Persistência do resultado entre 2023 e 2024](images/eda_persistencia_2023_2024.png)
+
+Cada ponto do gráfico da esquerda é um município, com o tamanho proporcional aos alunos: a nuvem se alinha à reta, e os pontos vermelhos do Rio Grande do Sul caem sistematicamente abaixo dela. À direita, a variação mediana por UF ordena o país e isola o estado. Por isso a inércia entrou como **referência a superar**, e não como alavanca de política.
+
+**O que sobra para a política?** Entre os fatores que um gestor move, a **oferta de pré-escola** se destaca, separando os alunos em 18,9 pontos entre o primeiro e o último quintil, o que equivale a 41% do teto estrutural. Os demais fatores acionáveis ficam entre 20% e 26% do teto, sem ordem confiável entre si.
 
 Cada variável entrou com **hipótese declarada antes da medição**, com a direção esperada: sem isso, qualquer resultado vira confirmação. Das treze hipóteses, quatro se confirmaram, quatro em parte e três ficaram fracas ou não confirmadas.
-
-![Distribuição da taxa municipal](images/eda_distribuicao_taxa_municipal.png)
 
 ## 6. Etapas de modelagem
 
