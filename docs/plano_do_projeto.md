@@ -30,7 +30,9 @@ Roteiro das etapas de desenvolvimento, com a entrega esperada de cada uma e as d
 | `desenv_05_aplicacao_estrategica.ipynb` | `evaluation/prod_05_aplicacao_estrategica.py` | 7 |
 
 
-**Pendência declarada.** Os scripts `prod_03`, `prod_04` e `prod_05` ainda não foram promovidos: os notebooks correspondentes são, por ora, a versão reproduzível dessas etapas. A promoção entra em Pull Request própria.
+**Promoção concluída.** Todas as etapas têm o seu par em `src/`. O `prod_04` reaproveita o pipeline do `prod_03`, e o `prod_05` reconstrói o modelo pela receita registrada, com trava que confere a AUC no teste antes de seguir.
+
+Os três scripts novos foram verificados com base sintética, que exercita a agregação por rede, a etapa A da curadoria, o pré-processamento, a busca, a escolha da família e as cinco respostas. A **execução completa contra o data lake ainda não foi feita**, e é o que falta para dar a promoção por encerrada: os notebooks continuam sendo a evidência de execução dessas etapas.
 
 **Versionamento.** Toda etapa nasce em branch própria e chega à branch principal por Pull Request com descrição e comentário de revisão. As decisões analíticas relevantes são registradas no diário antes do merge.
 

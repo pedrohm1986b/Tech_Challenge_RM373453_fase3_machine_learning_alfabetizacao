@@ -1,0 +1,6 @@
+regiao,redes,alunos,taxa_mediana_2024,prob_mediana_pct,pct_até 25%,pct_25 a 50%,pct_50 a 75%,pct_acima de 75%,sobreposicao_Norte,sobreposicao_Nordeste,sobreposicao_Centro-Oeste,sobreposicao_Sudeste,sobreposicao_Sul
+Norte,72,1008,46.798,12.434,54.167,8.333,6.944,30.556,100.0,88.889,,90.972,90.278
+Nordeste,72,1008,42.467,4.362,62.5,8.333,2.778,26.389,88.889,100.0,,89.583,86.111
+Centro-Oeste,0,0,,,,,,,,,,,
+Sudeste,144,2016,44.174,6.582,57.639,7.639,4.861,29.861,90.972,89.583,,100.0,90.278
+Sul,72,1008,50.662,14.446,51.389,8.333,6.944,33.333,90.278,86.111,,90.278,100.0
