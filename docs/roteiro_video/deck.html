@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prever quem fica para trás — Alfabetização · Tech Challenge Fase 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#09090b; --bg2:#141417; --panel:#17171c; --panel2:#202027;
+    --mag:#ff1e6f; --mag-deep:#c1004e; --cyan:#22e3c9; --cyan-deep:#0f8f7f;
+    --amber:#ffb020; --text:#f4f4f5; --muted:#a1a1aa; --dim:#6b6b73;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.18);
+    --font-d:'Archivo',system-ui,sans-serif; --font-b:'Inter',system-ui,sans-serif; --font-m:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow:hidden}
+  .deck{position:relative;width:100vw;height:100vh}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(28px,6vw,86px);opacity:0;visibility:hidden;transform:translateY(14px);
+    transition:opacity .45s ease,transform .45s ease;pointer-events:none;overflow-y:auto}
+  .slide.active{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+  .slide.top{justify-content:flex-start;padding-top:clamp(24px,4vw,52px)}
+  .kicker{font-family:var(--font-m);font-size:clamp(11px,1vw,14px);letter-spacing:.3em;text-transform:uppercase;
+    color:var(--cyan);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+  .kicker::before{content:"";width:32px;height:2px;background:var(--mag)}
+  h1{font-family:var(--font-d);font-weight:900;text-transform:uppercase;line-height:.98;letter-spacing:-.01em}
+  h2{font-family:var(--font-d);font-weight:800;text-transform:uppercase;line-height:1.02;letter-spacing:-.01em}
+  .lead{color:var(--muted);font-size:clamp(15px,1.5vw,20px);line-height:1.6;max-width:62ch;margin-top:20px}
+  .mag{color:var(--mag)} .cy{color:var(--cyan)} b.w{color:var(--text);font-weight:600}
+  .bg-grid{position:absolute;inset:0;z-index:-1;opacity:.45;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 70% at 70% 30%,#000 30%,transparent 80%)}
+  .glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:.2;z-index:-1}
+
+  .hud{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    padding:15px clamp(24px,5vw,56px);pointer-events:none}
+  .dots{display:flex;gap:9px;pointer-events:auto}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.16);cursor:pointer;transition:.25s;border:0}
+  .dot.on{background:var(--mag);transform:scale(1.25)}
+  .counter{font-family:var(--font-m);font-size:12px;color:var(--dim);letter-spacing:.15em}
+  .brandmark{font-family:var(--font-d);font-weight:800;font-size:13px;letter-spacing:.2em;color:var(--text);pointer-events:auto;
+    display:flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:100px;padding:6px 13px;background:rgba(20,20,23,.6);cursor:pointer;transition:.2s}
+  .brandmark:hover{border-color:var(--mag)} .brandmark:hover .cam{color:var(--mag)}
+  .brandmark span{color:var(--mag)} .brandmark .cam{color:var(--dim);font-size:13px;transition:.2s;display:flex}
+  .hint{font-family:var(--font-m);font-size:12px;color:var(--dim);letter-spacing:.1em;margin-top:30px}
+  .hint kbd{border:1px solid var(--line2);border-radius:5px;padding:2px 7px;color:var(--muted);font-family:var(--font-m)}
+
+  .cover-title{font-size:clamp(38px,7vw,100px);max-width:16ch}
+  .cover-sub{font-family:var(--font-m);font-size:clamp(13px,1.3vw,17px);color:var(--muted);letter-spacing:.05em;margin-top:24px}
+  .cover-meta{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;padding-top:38px}
+  .author{font-size:14px;color:var(--muted)} .author b{color:var(--text);font-weight:600}
+  .tag{font-family:var(--font-m);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);
+    border:1px solid var(--cyan-deep);border-radius:100px;padding:6px 14px}
+
+  .stat-huge{font-family:var(--font-d);font-weight:900;font-size:clamp(80px,17vw,250px);line-height:.82;
+    background:linear-gradient(135deg,#fff 0%,var(--cyan) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .metas{display:flex;align-items:center;gap:clamp(14px,3vw,44px);margin-top:28px;flex-wrap:wrap}
+  .metas .num{font-family:var(--font-d);font-weight:800;font-size:clamp(24px,4vw,46px)}
+  .metas .lo{color:var(--amber)} .metas .hi{color:var(--cyan)}
+  .metas .bar{flex:1;min-width:120px;height:10px;border-radius:100px;background:linear-gradient(90deg,var(--amber),var(--cyan))}
+  .metas small{display:block;font-family:var(--font-m);font-size:11px;color:var(--dim);letter-spacing:.1em;margin-top:4px}
+  .subline{font-family:var(--font-d);font-weight:700;font-size:clamp(19px,2.6vw,34px);margin-top:26px;letter-spacing:-.01em;max-width:26ch;line-height:1.12}
+  .q-box{margin-top:26px;border-left:3px solid var(--mag);padding:4px 0 4px 20px}
+  .q-box .q{font-family:var(--font-d);font-weight:700;font-size:clamp(18px,2.4vw,28px)}
+  .q-box .a{color:var(--muted);font-family:var(--font-m);font-size:13.5px;letter-spacing:.05em;margin-top:8px}
+
+  .pipe-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px}
+  .pipe-top{position:relative;margin-top:22px}
+  .branches{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible}
+  .flow{display:flex;align-items:stretch;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+  .node{position:relative;flex:1 1 0;min-width:92px;border:1px solid var(--line2);border-radius:11px;background:var(--panel);
+    padding:12px 10px;cursor:pointer;transition:.2s;text-align:center;z-index:3}
+  .node:hover{border-color:var(--cyan);transform:translateY(-3px)}
+  .node.active{border-color:var(--mag);background:var(--panel2);box-shadow:0 0 0 1px var(--mag),0 10px 26px -14px var(--mag)}
+  .node .ico{font-size:17px;line-height:1}
+  .node .nm{font-family:var(--font-d);font-weight:700;font-size:12.5px;text-transform:uppercase;margin-top:5px;letter-spacing:.02em}
+  .node .layer{font-family:var(--font-m);font-size:9px;color:var(--dim);letter-spacing:.12em;margin-top:3px;text-transform:uppercase}
+  .node.medal{border-color:var(--cyan-deep)} .node.medal .nm{color:var(--cyan)}
+  .node.virada{border-color:var(--mag-deep)} .node.virada .nm{color:var(--mag)}
+  .conn{flex:0 0 20px;display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:13px}
+  .offshoots{display:flex;gap:0;margin-top:52px;position:relative;z-index:3}
+  .off-slot{flex:1;display:flex}
+  .off-slot.s-dec{justify-content:flex-start;padding-left:4%}
+  .off-slot.s-tra{justify-content:flex-start;padding-left:10%}
+  .off{width:min(340px,90%);border:1px dashed var(--mag-deep);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.2s;background:rgba(255,30,111,.04)}
+  .off:hover{background:rgba(255,30,111,.09)} .off.active{border-style:solid;border-color:var(--mag);background:rgba(255,30,111,.09)}
+  .off .cta{font-family:var(--font-m);font-size:9.5px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+  .off b{font-family:var(--font-d);font-weight:700;font-size:12.5px;text-transform:uppercase;color:var(--mag);letter-spacing:.05em;display:block;margin-top:2px}
+
+  .detail{margin-top:16px;border:1px solid var(--line2);border-radius:13px;background:rgba(255,255,255,.02);padding:16px 20px}
+  .detail-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px;flex-wrap:wrap}
+  .detail-head h3{font-family:var(--font-d);font-weight:800;text-transform:uppercase;font-size:18px}
+  .badge{font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border-radius:100px}
+  .b-batch{color:var(--amber);border:1px solid var(--amber)} .b-stream{color:var(--mag);border:1px solid var(--mag)} .b-store{color:var(--cyan);border:1px solid var(--cyan-deep)}
+  .dsplit{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .dsplit .dt,.dblk .dt{font-family:var(--font-m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
+  .dsplit .dt.m,.dblk .dt.m{color:var(--mag)}
+  .detail p{color:var(--muted);font-size:13.5px;line-height:1.5}
+  .dtab{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:2px}
+  .dtab th{font-family:var(--font-m);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:left;padding:4px 10px 6px 0;border-bottom:1px solid var(--line2);font-weight:500}
+  .dtab td{padding:5px 10px 5px 0;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  .dtab td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
+  .dtab .n{font-family:var(--font-m);color:var(--cyan);text-align:right;white-space:nowrap}
+  .dtab .n.m{color:var(--mag)}
+  .dnote{margin-top:12px;border-left:2px solid var(--mag);padding:2px 0 2px 14px;font-size:13px;color:var(--muted);line-height:1.5}
+  .dnote b{color:var(--text);font-weight:600}
+  .dlist{list-style:none;margin-top:2px}
+  .dlist li{color:var(--muted);font-size:13.5px;line-height:1.45;padding:3px 0 3px 18px;position:relative}
+  .dlist li::before{content:"▸";position:absolute;left:0;color:var(--cyan)}
+
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:22px}
+  .card{border:1px solid var(--line2);border-radius:13px;padding:18px 20px;background:var(--panel);transition:.2s}
+  .card:hover{border-color:var(--cyan)}
+  .card .win{font-family:var(--font-d);font-weight:800;text-transform:uppercase;font-size:17px;color:var(--cyan)}
+  .card .vs{font-family:var(--font-m);font-size:12px;color:var(--dim);margin:6px 0 11px}
+  .card .vs s{color:var(--muted)}
+  .card p{color:var(--muted);font-size:13.5px;line-height:1.5}
+  .card.lim .win{color:var(--mag)}
+
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  .vs-col{border:1px solid var(--line2);border-radius:13px;padding:20px 22px;background:var(--panel)}
+  .vs-col.win{border-color:var(--cyan-deep);background:rgba(34,227,201,.04)}
+  .vs-col .h{font-family:var(--font-d);font-weight:800;text-transform:uppercase;font-size:16px;margin-bottom:12px}
+  .vs-col.win .h{color:var(--cyan)} .vs-col.lose .h{color:var(--muted)}
+  .vs-col .big{font-family:var(--font-d);font-weight:900;font-size:clamp(34px,5vw,58px);line-height:1}
+  .vs-col.win .big{color:var(--cyan)} .vs-col.lose .big{color:var(--muted)}
+  .vs-col .cap{font-family:var(--font-m);font-size:11px;color:var(--dim);letter-spacing:.1em;margin-top:4px}
+  .vs-col ul{list-style:none;margin-top:14px}
+  .vs-col li{color:var(--muted);font-size:13px;line-height:1.45;padding:3px 0 3px 16px;position:relative}
+  .vs-col li::before{content:"▸";position:absolute;left:0;color:var(--dim)}
+  .vs-col.win li::before{color:var(--cyan)}
+
+  .steps{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .step{flex:1 1 210px;border:1px solid var(--line2);border-radius:12px;padding:16px 18px;background:var(--panel)}
+  .step .n{font-family:var(--font-m);font-size:10px;letter-spacing:.16em;color:var(--mag);text-transform:uppercase}
+  .step b{display:block;font-family:var(--font-d);font-weight:800;text-transform:uppercase;font-size:15px;margin:8px 0 7px}
+  .step p{color:var(--muted);font-size:13px;line-height:1.48}
+  .step .hl{color:var(--cyan);font-family:var(--font-m);font-size:12px;display:block;margin-top:8px}
+
+  .metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+  .metric{border:1px solid var(--line2);border-radius:12px;padding:16px 18px;background:var(--panel);text-align:center}
+  .metric .v{font-family:var(--font-d);font-weight:900;font-size:clamp(26px,3.4vw,40px);color:var(--cyan);line-height:1}
+  .metric .v.m{color:var(--mag)}
+  .metric .l{font-family:var(--font-m);font-size:10.5px;color:var(--dim);letter-spacing:.08em;margin-top:8px;line-height:1.4}
+
+  .close-line{font-family:var(--font-d);font-weight:800;text-transform:uppercase;font-size:clamp(20px,3vw,38px);line-height:1.08;margin-top:auto;padding-top:26px;max-width:30ch}
+
+  body.snapping .glow{display:none!important}
+  body.snapping .stat-huge{background:none!important;-webkit-text-fill-color:var(--cyan)!important;color:var(--cyan)!important}
+
+  @media(max-width:820px){.dsplit,.cards,.versus,.metric-row{grid-template-columns:1fr}.flow{flex-wrap:wrap}.conn{display:none}.node{flex:1 1 40%}.offshoots{flex-wrap:wrap}.branches{display:none}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 0 · CAPA -->
+  <section class="slide active">
+    <div class="bg-grid"></div>
+    <div class="glow" style="width:520px;height:520px;background:var(--mag);top:-140px;right:-80px"></div>
+    <div class="glow" style="width:420px;height:420px;background:var(--cyan);bottom:-120px;left:-60px"></div>
+    <div class="kicker">Tech Challenge · Fase 3 — Machine Learning</div>
+    <h1 class="cover-title">Prever quem fica para trás na <span class="mag">alfabetização</span></h1>
+    <div class="cover-sub">Modelo supervisionado · Curadoria de variáveis · Interpretabilidade · Política pública</div>
+    <div class="cover-meta">
+      <div class="author">Apresentado por <b>Pedro Henrique Martinez Bertolo</b> · RM373453<br>FIAP POS TECH · IA para Devs</div>
+      <div class="tag">Vídeo executivo</div>
+    </div>
+    <div class="hint">navegue com <kbd>←</kbd> <kbd>→</kbd></div>
+  </section>
+
+  <!-- 1 · CONTEXTO -->
+  <section class="slide">
+    <div class="bg-grid"></div>
+    <div class="glow" style="width:500px;height:500px;background:var(--cyan);top:-100px;right:0"></div>
+    <div class="kicker">Contexto · a necessidade</div>
+    <div class="stat-huge">59,2%</div>
+    <div class="lead" style="margin-top:10px">das crianças da rede pública alfabetizadas ao fim do 2º ano em 2024 — contra a meta pactuada de <b class="w">59,9%</b>. Faltaram sete décimos de ponto.</div>
+    <div class="metas">
+      <span class="num lo">59,9%<small>meta 2024</small></span>
+      <span class="bar"></span>
+      <span class="num hi">80%<small>meta 2030</small></span>
+    </div>
+    <div class="q-box">
+      <div class="q">"Quais redes não vão bater a meta — e dá para saber antes?"</div>
+      <div class="a">a média nacional não diz onde agir; o resultado só sai quando o ciclo já acabou.</div>
+    </div>
+  </section>
+
+  <!-- 2 · PIPELINE DE DESENVOLVIMENTO (interativa) -->
+  <section class="slide top">
+    <div class="bg-grid"></div>
+    <div class="pipe-head">
+      <div>
+        <div class="kicker">Como o trabalho foi feito</div>
+        <h2 style="font-size:clamp(24px,3.6vw,46px)">A pipeline de desenvolvimento, etapa por etapa</h2>
+      </div>
+      <div class="hint" style="margin:0">clique em cada etapa → o que foi decidido e o que saiu dali</div>
+    </div>
+
+    <div class="pipe-top">
+      <svg class="branches" id="branches"></svg>
+      <div class="flow" id="flow">
+        <div class="node medal" data-k="base"><div class="ico">🗄️</div><div class="nm">Base</div><div class="layer">abt · 7 fontes</div></div>
+        <div class="conn">→</div>
+        <div class="node medal" data-k="eda"><div class="ico">🔍</div><div class="nm">Exploração</div><div class="layer">hipóteses</div></div>
+        <div class="conn">→</div>
+        <div class="node" data-k="pipeline"><div class="ico">⚙️</div><div class="nm">Pipeline</div><div class="layer">pré-processamento</div></div>
+        <div class="conn">→</div>
+        <div class="node" data-k="aluno"><div class="ico">🧒</div><div class="nm">Modelo 1</div><div class="layer">grão aluno</div></div>
+        <div class="conn">→</div>
+        <div class="node virada" data-k="rede"><div class="ico">🏫</div><div class="nm">Modelo 2</div><div class="layer">grão rede</div></div>
+        <div class="conn">→</div>
+        <div class="node medal" data-k="aplicacao"><div class="ico">🎯</div><div class="nm">Aplicação</div><div class="layer">5 perguntas</div></div>
+      </div>
+      <div class="offshoots">
+        <div class="off-slot s-dec">
+          <div class="off" data-k="decisoes"><div class="cta">acompanha todas as etapas</div><b>⤷ Diário de decisões · 15 registros</b></div>
+        </div>
+        <div class="off-slot s-tra">
+          <div class="off" data-k="travas"><div class="cta">executadas a cada rodada</div><b>⤷ Travas contra vazamento</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail" id="detail"></div>
+  </section>
+
+  <!-- 3 · A VIRADA DE GRÃO -->
+  <section class="slide">
+    <div class="bg-grid"></div>
+    <div class="glow" style="width:460px;height:460px;background:var(--mag);bottom:-140px;right:-60px"></div>
+    <div class="kicker">A decisão que mudou o projeto</div>
+    <h2 style="font-size:clamp(24px,3.8vw,50px);max-width:24ch">Nenhuma variável descreve <span class="mag">a criança</span></h2>
+    <div class="lead" style="margin-top:14px">Todas as fontes têm grão de escola, rede ou município. Duas crianças da mesma sala chegam ao modelo com valores idênticos — e ainda assim uma é alfabetizada e a outra não.</div>
+    <div class="versus">
+      <div class="vs-col lose">
+        <div class="h">Modelo 1 · grão do aluno</div>
+        <div class="big">0,673</div>
+        <div class="cap">AUC no teste · teto da tarefa: 0,701</div>
+        <ul>
+          <li>90% da variação está <b>dentro</b> da rede</li>
+          <li>ganho sobre repetir 2023: <b>+0,030</b></li>
+          <li>perto do próprio teto: não há para onde crescer</li>
+        </ul>
+      </div>
+      <div class="vs-col win">
+        <div class="h">Modelo 2 · grão da rede</div>
+        <div class="big">0,886</div>
+        <div class="cap">AUC no teste · sem limite estrutural</div>
+        <ul>
+          <li>grão dos dados = grão da decisão</li>
+          <li>ganho sobre repetir 2023: <b>+0,117</b></li>
+          <li>6.535 redes em 5.570 municípios</li>
+        </ul>
+      </div>
+    </div>
+    <div class="lead" style="margin-top:18px">As duas AUCs não se comparam como número: as tarefas são diferentes. O que elas mostram é <b class="w">onde os dados têm informação</b>.</div>
+  </section>
+
+  <!-- 4 · O MODELO -->
+  <section class="slide top">
+    <div class="bg-grid"></div>
+    <div class="kicker">O modelo da rede</div>
+    <h2 style="font-size:clamp(23px,3.4vw,44px)">Curadoria, escolha e leitura</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01 · curadoria</div>
+        <b>41 → 14 variáveis</b>
+        <p>Etapa A tira redundância sem olhar a resposta (ausentes, quase constantes, VIF, correlação). Etapa B elimina passo a passo em cinco rodadas e mantém quem fica no melhor conjunto em pelo menos quatro.</p>
+        <span class="hl">+ UF e região como ponto de partida</span>
+      </div>
+      <div class="step">
+        <div class="n">02 · escolha</div>
+        <b>Random Forest</b>
+        <p>Três famílias comparadas com validação cruzada agrupada por município, pelo critério declarado antes de rodar: menor log-loss, com desempate a favor do modelo mais simples.</p>
+        <span class="hl">0,8968 contra 0,8962 e 0,8886</span>
+      </div>
+      <div class="step">
+        <div class="n">03 · leitura</div>
+        <b>AUC e sensibilidade</b>
+        <p>A meta fica em cima da média do país: ali um erro pequeno troca o lado da classificação, e a acurácia passaria a medir sorte. A referência é repetir o ano anterior.</p>
+        <span class="hl">acurácia não é usada</span>
+      </div>
+    </div>
+    <div class="metric-row">
+      <div class="metric"><div class="v">0,886</div><div class="l">AUC no teste<br>1.104 municípios nunca vistos</div></div>
+      <div class="metric"><div class="v">0,769</div><div class="l">AUC de repetir 2023<br>a referência sem modelo</div></div>
+      <div class="metric"><div class="v">76%</div><div class="l">sensibilidade<br>redes fora da meta encontradas</div></div>
+      <div class="metric"><div class="v m">59%</div><div class="l">sensibilidade da referência<br>o que se perderia sem modelo</div></div>
+    </div>
+  </section>
+
+  <!-- 5 · AS CINCO RESPOSTAS (interativa) -->
+  <section class="slide top">
+    <div class="bg-grid"></div>
+    <div class="pipe-head">
+      <div>
+        <div class="kicker">Aplicação estratégica</div>
+        <h2 style="font-size:clamp(24px,3.6vw,46px)">As cinco perguntas de negócio</h2>
+      </div>
+      <div class="hint" style="margin:0">clique em cada pergunta → a resposta e o número que a sustenta</div>
+    </div>
+    <div class="pipe-top">
+      <div class="flow" id="flow-q">
+        <div class="node" data-q="q1"><div class="ico">1</div><div class="nm">Fatores</div><div class="layer">o que pesa</div></div>
+        <div class="conn">·</div>
+        <div class="node" data-q="q2"><div class="ico">2</div><div class="nm">Risco</div><div class="layer">onde agir</div></div>
+        <div class="conn">·</div>
+        <div class="node" data-q="q3"><div class="ico">3</div><div class="nm">Regiões</div><div class="layer">quem se parece</div></div>
+        <div class="conn">·</div>
+        <div class="node" data-q="q4"><div class="ico">4</div><div class="nm">Previsão</div><div class="layer">metas futuras</div></div>
+        <div class="conn">·</div>
+        <div class="node" data-q="q5"><div class="ico">5</div><div class="nm">Variáveis</div><div class="layer">influência</div></div>
+      </div>
+    </div>
+    <div class="detail" id="detail-q"></div>
+  </section>
+
+  <!-- 6 · LIMITAÇÕES -->
+  <section class="slide">
+    <div class="bg-grid"></div>
+    <div class="kicker">Honestidade analítica</div>
+    <h2 style="font-size:clamp(24px,3.8vw,50px)">O que o modelo <span class="mag">não</span> faz</h2>
+    <div class="cards">
+      <div class="card lim">
+        <div class="win">Acerta a inércia, não a virada</div>
+        <div class="vs">91% nas permanências · <s>54% nas mudanças</s></div>
+        <p>É mais frágil justamente onde a política age. Serve para priorizar, não para julgar gestão.</p>
+      </div>
+      <div class="card lim">
+        <div class="win">Mostra associação, não causa</div>
+        <div class="vs">dependência parcial, com tudo o mais igual</div>
+        <p>Nada aqui diz que construir biblioteca alfabetiza: diz que redes com biblioteca vão melhor.</p>
+      </div>
+      <div class="card lim">
+        <div class="win">Enxerga o resultado, não o contexto</div>
+        <div class="vs">Rio Grande do Sul · 472 redes em risco em 2024</div>
+        <p>O ano das enchentes. O modelo não sabe da enchente: ler aquilo como problema crônico de gestão seria um erro.</p>
+      </div>
+      <div class="card lim">
+        <div class="win">A régua de 2030 é outra</div>
+        <div class="vs">treinado no alvo de 59,9%, não nos 80%</div>
+        <p>O que se transporta para o próximo ciclo é o método, não os números.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · FECHO -->
+  <section class="slide top">
+    <div class="bg-grid"></div>
+    <div class="glow" style="width:520px;height:520px;background:var(--mag);top:-160px;left:-80px"></div>
+    <div class="kicker">O que fica para o próximo ciclo</div>
+    <h2 style="font-size:clamp(23px,3.4vw,44px)">Três entregas utilizáveis</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">lista</div>
+        <b>Redes ordenadas por impacto</b>
+        <p>2.380 redes nominais, cada uma com alunos, distância até a meta e quanto moveria a taxa nacional.</p>
+        <span class="hl">reports/redes_risco_2024.csv</span>
+      </div>
+      <div class="step">
+        <div class="n">mapa</div>
+        <b>Onde o problema se concentra</b>
+        <p>Municípios por faixa de probabilidade, do alerta forte ao território sem risco aparente.</p>
+        <span class="hl">51% das crianças abaixo de 50% de chance</span>
+      </div>
+      <div class="step">
+        <div class="n">régua</div>
+        <b>Prioridade com confiabilidade medida</b>
+        <p>Cada faixa tem taxa de confirmação conhecida, o que permite dosar intervenção e acompanhamento.</p>
+        <span class="hl">89% de confirmação na faixa mais baixa</span>
+      </div>
+    </div>
+    <div class="close-line">A meta de 2030 é 80%. Com o método repetido a cada ciclo, dá para saber quem fica para trás <span class="cy">antes</span> que o ano termine.</div>
+  </section>
+
+</div>
+
+<div class="hud">
+  <button class="brandmark" id="snap" title="Salvar este slide como imagem PNG"><span class="cam" aria-hidden="true">⤓</span>POS<span>·</span>TECH</button>
+  <div class="dots" id="dots"></div>
+  <div class="counter"><span id="cur">01</span> / <span id="tot">08</span></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const PIPE=2;
+  let i=0;
+  slides.forEach((_,n)=>{const b=document.createElement('button');b.className='dot'+(n===0?' on':'');b.onclick=()=>go(n);dotsWrap.appendChild(b);});
+  const dots=[...document.querySelectorAll('.dot')];
+  document.getElementById('tot').textContent=String(slides.length).padStart(2,'0');
+  function go(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    document.getElementById('cur').textContent=String(i+1).padStart(2,'0');
+    if(i===PIPE) setTimeout(drawBranches,70);
+  }
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(i+1);}
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(i-1);}
+    if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+  });
+
+  // linhas tracejadas: decisoes <- base, travas <- pipeline
+  function drawBranches(){
+    const wrap=document.querySelector('.pipe-top'); const svg=document.getElementById('branches');
+    if(!wrap||!svg) return;
+    const wr=wrap.getBoundingClientRect();
+    svg.setAttribute('viewBox',`0 0 ${wr.width} ${wr.height}`);
+    const pairs=[['base','decisoes'],['pipeline','travas']];
+    let paths='';
+    pairs.forEach(([a,b])=>{
+      const na=document.querySelector(`.node[data-k="${a}"]`), nb=document.querySelector(`.off[data-k="${b}"]`);
+      if(!na||!nb) return;
+      const ra=na.getBoundingClientRect(), rb=nb.getBoundingClientRect();
+      const x1=ra.left+ra.width/2-wr.left, y1=ra.bottom-wr.top;
+      const x2=rb.left+Math.min(28,rb.width/2)-wr.left, y2=rb.top-wr.top;
+      const my=(y1+y2)/2;
+      paths+=`<path d="M${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}" fill="none" stroke="#ff1e6f" stroke-width="1.6" stroke-dasharray="4 4" marker-end="url(#ah)"/>`;
+      paths+=`<circle cx="${x1}" cy="${y1}" r="2.5" fill="#ff1e6f"/>`;
+    });
+    svg.innerHTML=`<defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1L8 5L1 9" fill="none" stroke="#ff1e6f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>${paths}`;
+  }
+  addEventListener('resize',()=>{if(i===PIPE)drawBranches();});
+  addEventListener('load',()=>setTimeout(drawBranches,120));
+
+  // snapshot do slide atual -> PNG
+  document.getElementById('snap').addEventListener('click',async()=>{
+    if(typeof html2canvas!=='function'){alert('Biblioteca de captura ainda carregando — tente de novo em 1s.');return;}
+    const slide=slides[i];
+    document.body.classList.add('snapping');
+    try{
+      const canvas=await html2canvas(slide,{backgroundColor:'#09090b',scale:2,logging:false,useCORS:true,windowWidth:document.documentElement.clientWidth,windowHeight:document.documentElement.clientHeight});
+      const a=document.createElement('a');
+      a.href=canvas.toDataURL('image/png');
+      a.download=`slide-${String(i+1).padStart(2,'0')}.png`;
+      a.click();
+    }catch(err){alert('Não foi possível gerar a imagem: '+err.message);}
+    document.body.classList.remove('snapping');
+  });
+
+  // detalhe da pipeline de desenvolvimento
+  const P={
+    base:{name:'Base analítica',badge:'desenv_01 · 3,87 mi de alunos',bcls:'b-store',html:`
+      <div class="dsplit">
+        <div class="dblk"><div class="dt">O que entra</div>
+          <p>A linha vem da <b style="color:var(--text)">Silver</b> (um aluno por linha) e o contexto vem da <b style="color:var(--text)">Gold</b> (município por ano), sempre <b style="color:var(--text)">defasado</b>: 2024 é previsto com informação de 2023 e anterior.</p></div>
+        <div class="dblk"><div class="dt m">O enriquecimento</div>
+          <p>Sete fontes públicas externas, escolhidas pelas hipóteses e não pela disponibilidade: Censo Escolar, Indicadores Educacionais, INSE, Censo Demográfico, PIB municipal, Atlas do Desenvolvimento Humano e SINASC.</p></div>
+      </div>
+      <div class="dnote"><b>Por que enriquecer.</b> O lake da fase anterior mede o indicador, mas traz quase só a resposta. Sem as fontes externas, a única variável explicativa seria a taxa do ano anterior: o modelo repetiria o passado, sem nada sobre o que um gestor possa agir.</div>`},
+
+    eda:{name:'Análise exploratória',badge:'desenv_02 · hipóteses declaradas',bcls:'b-store',html:`
+      <ul class="dlist">
+        <li>A desigualdade é territorial antes de ser escolar: mais de 30 pontos de amplitude entre UFs</li>
+        <li>A taxa municipal depende do cálculo — média das taxas ou taxa entre alunos, com o peso do INEP</li>
+        <li>As associações no grão do aluno são fracas e não lineares, o que já antecipava o teto da tarefa</li>
+        <li>Cada variável candidata entra com <b style="color:var(--text)">hipótese escrita antes</b> da medição, com a direção esperada</li>
+      </ul>
+      <div class="dnote"><b>Por que declarar a hipótese antes.</b> Sem isso, qualquer resultado vira confirmação. Com a direção declarada, o sinal contrário ao esperado é evidência de problema, não descoberta.</div>`},
+
+    pipeline:{name:'Pipeline de pré-processamento',badge:'scikit-learn · sem vazamento',bcls:'b-batch',html:`
+      <ul class="dlist">
+        <li>Indicadores de ausência criados <b style="color:var(--text)">antes</b> da imputação, que apagaria o sinal</li>
+        <li>Imputação pela mediana da UF, com recurso à mediana nacional</li>
+        <li>Codificação one-hot das categóricas; logaritmo e padronização só nos modelos lineares</li>
+        <li>Tudo dentro do <i>Pipeline</i>: as estatísticas são aprendidas apenas no treino, a cada dobra</li>
+      </ul>
+      <div class="dnote"><b>A partição é por município</b>, e não por rede: as duas redes de um mesmo município caem sempre do mesmo lado, para que nenhuma informação do treino chegue ao teste pela vizinhança.</div>`},
+
+    aluno:{name:'Modelo 1 · grão do aluno',badge:'desenv_03 · o limite medido',bcls:'b-batch',html:`
+      <table class="dtab"><thead><tr><th>Referência ou modelo</th><th>O que faz</th><th class="n">AUC</th></tr></thead><tbody>
+      <tr><td>constante</td><td>prevê a taxa média para todos</td><td class="n">0,500</td></tr>
+      <tr><td>repetir 2023</td><td>supõe que a rede repete o ano anterior</td><td class="n">0,643</td></tr>
+      <tr><td><b>modelo do aluno</b></td><td>três famílias, hiperparâmetros buscados</td><td class="n">0,673</td></tr>
+      <tr><td>melhor previsão possível</td><td>a taxa real de 2024 da rede, com a resposta na mão</td><td class="n m">0,701</td></tr>
+      </tbody></table>
+      <div class="dnote"><b>O teto.</b> Como todas as variáveis são iguais para os alunos da mesma rede, nenhum modelo passa de 0,701 nesse grão. O nosso chegou a 0,673, quase colado no teto e a apenas <b>+0,030</b> de repetir o ano anterior. Funciona, mas não sustenta decisão.</div>`},
+
+    rede:{name:'Modelo 2 · grão da rede',badge:'desenv_04 · a entrega',bcls:'b-stream',html:`
+      <div class="dsplit">
+        <div class="dblk"><div class="dt m">A mudança</div>
+          <p>A unidade prevista passa a ser a <b style="color:var(--text)">rede de ensino de cada município</b>: 6.535 unidades. Alinha o grão das variáveis, o grão da resposta e o grão em que a política é decidida.</p></div>
+        <div class="dblk"><div class="dt">A curadoria</div>
+          <p>De 41 para 14 variáveis em duas etapas objetivas, mais UF e região como ponto de partida. Prevê melhor com 16 do que com 41, e fica explicável.</p></div>
+      </div>
+      <div class="dnote"><b>0,886 de AUC</b> em 1.104 municípios que nenhuma etapa viu, contra 0,769 de repetir 2023. Encontra <b>três de cada quatro</b> redes que não cumprem a meta.</div>`},
+
+    aplicacao:{name:'Aplicação estratégica',badge:'desenv_05 · 5 perguntas',bcls:'b-store',html:`
+      <p style="margin-bottom:10px">O modelo é reconstruído pela receita registrada, com trava que confere a AUC antes de responder qualquer coisa. Cada pergunta do enunciado vira uma seção, na ordem:</p>
+      <table class="dtab"><thead><tr><th>Pergunta</th><th>Método</th><th class="n">Saída</th></tr></thead><tbody>
+      <tr><td>fatores de impacto</td><td>dependência parcial, ponto de partida fixo</td><td class="n">11 alavancas</td></tr>
+      <tr><td>municípios em risco</td><td>acertos do modelo, por impacto na taxa nacional</td><td class="n">2.380 redes</td></tr>
+      <tr><td>regiões semelhantes</td><td>sobreposição das distribuições de probabilidade</td><td class="n">2 duplas</td></tr>
+      <tr><td>metas futuras</td><td>confiabilidade medida por faixa</td><td class="n">4 faixas</td></tr>
+      <tr><td>variáveis influentes</td><td>permutação, individual e em bloco</td><td class="n">16 variáveis</td></tr>
+      </tbody></table>`},
+
+    decisoes:{name:'Diário de decisões',badge:'15 registros · docs/decisoes.md',bcls:'b-stream',html:`
+      <p style="margin-bottom:10px">Toda escolha analítica relevante foi registrada antes do resultado aparecer, com contexto, justificativa, limitação e alternativas descartadas. Algumas que mudaram o projeto:</p>
+      <table class="dtab"><thead><tr><th>Registro</th><th>O que decidiu</th></tr></thead><tbody>
+      <tr><td>D-001</td><td>a linha vem da Silver, o contexto vem da Gold, defasado</td></tr>
+      <tr><td>D-006</td><td>seleção de variáveis guiada por hipóteses declaradas</td></tr>
+      <tr><td>D-013</td><td>alvo no nível da rede, lido por AUC e sensibilidade</td></tr>
+      <tr><td>D-015</td><td>curadoria em duas etapas e território como ponto de partida</td></tr>
+      </tbody></table>
+      <div class="dnote">O diário é o que permite defender o trabalho depois: <b>a decisão está datada e justificada antes de se saber o resultado</b>.</div>`},
+
+    travas:{name:'Travas contra vazamento',badge:'executadas a cada rodada',bcls:'b-batch',html:`
+      <ul class="dlist">
+        <li>Contexto sempre defasado: 2024 previsto com dado de 2023 e anterior</li>
+        <li>Partição por município, não por rede</li>
+        <li>Pré-processamento aprendido só no treino, dentro do pipeline</li>
+        <li>Verificação de invariância dentro da rede antes de agregar</li>
+        <li>Conferência de que a agregação preserva alunos e taxa</li>
+        <li>Trava de reprodução: a aplicação recusa rodar se a AUC não bater com a registrada</li>
+      </ul>
+      <div class="dnote">São <b>verificações executáveis</b>, não promessas: qualquer violação interrompe a execução com erro.</div>`}
+  };
+  const nodes=[...document.querySelectorAll('.node[data-k],.off[data-k]')];
+  const detail=document.getElementById('detail');
+  function pick(k){
+    nodes.forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+    const d=P[k];
+    detail.innerHTML=`<div class="detail-head"><h3>${d.name}</h3><span class="badge ${d.bcls}">${d.badge}</span></div>${d.html}`;
+  }
+  nodes.forEach(n=>n.addEventListener('click',()=>pick(n.dataset.k)));
+  pick('base');
+
+  // detalhe das cinco perguntas
+  const Q={
+    q1:{name:'Quais fatores mais impactam a alfabetização?',badge:'11 alavancas',bcls:'b-store',html:`
+      <table class="dtab"><thead><tr><th>Quem tem a caneta</th><th>Fator</th><th class="n">Efeito na chance</th></tr></thead><tbody>
+      <tr><td>outra pasta · saúde e assistência</td><td>Mães adolescentes</td><td class="n m">−3,3 pp</td></tr>
+      <tr><td>outra pasta · renda</td><td>Nível socioeconômico das famílias</td><td class="n">+2,3 pp</td></tr>
+      <tr><td>outra pasta · saúde e segurança</td><td>Idade mediana da população</td><td class="n">+1,7 pp</td></tr>
+      <tr><td><b>a educação decide</b></td><td>Oferta de pré-escola</td><td class="n">+1,4 pp</td></tr>
+      <tr><td><b>a educação decide</b></td><td>Escolas com biblioteca</td><td class="n">+0,9 pp</td></tr>
+      </tbody></table>
+      <div class="dnote"><b>Os maiores efeitos estão fora da escola</b>, e isso não tira a responsabilidade da educação: coloca parte da solução em outras pastas. Efeitos medidos entre redes que partiram do mesmo lugar, o que explica por que nenhum passa de 3,5 pontos.</div>`},
+
+    q2:{name:'Quais municípios apresentam maior risco?',badge:'2.380 redes · 820 mil alunos',bcls:'b-stream',html:`
+      <table class="dtab"><thead><tr><th>Município</th><th>Rede</th><th class="n">Alunos</th><th class="n">Ganho no país</th></tr></thead><tbody>
+      <tr><td>São Paulo · SP</td><td>Municipal</td><td class="n">41.751</td><td class="n">+0,271 pp</td></tr>
+      <tr><td>Salvador · BA</td><td>Municipal</td><td class="n">12.112</td><td class="n">+0,133 pp</td></tr>
+      <tr><td>Manaus · AM</td><td>Municipal</td><td class="n">18.666</td><td class="n">+0,114 pp</td></tr>
+      <tr><td>Porto Alegre · RS</td><td>Estadual</td><td class="n">4.904</td><td class="n">+0,088 pp</td></tr>
+      <tr><td><b>as 15 primeiras</b></td><td></td><td class="n"></td><td class="n m">+1,25 pp</td></tr>
+      </tbody></table>
+      <div class="dnote"><b>Quinze redes colocariam o país acima da meta de 2024</b>: de 59,2% para 60,45%. Mas elas valem só um quinto do ganho possível: metade exige 134 redes, e o resto está espalhado por mais de duas mil. Um plano restrito às capitais melhora o indicador e não muda o mapa.</div>`},
+
+    q3:{name:'Quais regiões possuem padrões semelhantes?',badge:'duas duplas',bcls:'b-store',html:`
+      <table class="dtab"><thead><tr><th>Região</th><th class="n">Probabilidade mediana</th><th class="n">até 25%</th><th class="n">acima de 75%</th></tr></thead><tbody>
+      <tr><td>Norte</td><td class="n">14%</td><td class="n m">66%</td><td class="n">11%</td></tr>
+      <tr><td>Nordeste</td><td class="n">30%</td><td class="n m">46%</td><td class="n">23%</td></tr>
+      <tr><td>Sul</td><td class="n">60%</td><td class="n">19%</td><td class="n">37%</td></tr>
+      <tr><td>Centro-Oeste</td><td class="n">81%</td><td class="n">9%</td><td class="n">56%</td></tr>
+      <tr><td>Sudeste</td><td class="n">88%</td><td class="n">6%</td><td class="n">69%</td></tr>
+      </tbody></table>
+      <div class="dnote"><b>Norte e Nordeste (79% de sobreposição) e Centro-Oeste e Sudeste (88%).</b> A diferença entre os dois lados não é de natureza, é de grau: são os mesmos fatores em posições diferentes da régua. O Nordeste é a única região com peso nas duas pontas, o que desaconselha política regional única.</div>`},
+
+    q4:{name:'Como prever quem pode não atingir metas futuras?',badge:'confiabilidade por faixa',bcls:'b-batch',html:`
+      <table class="dtab"><thead><tr><th>Faixa de probabilidade</th><th class="n">Taxa mediana 2024</th><th class="n">Não cumpriram</th><th>Dose de política</th></tr></thead><tbody>
+      <tr><td>até 25%</td><td class="n">42,0%</td><td class="n m">89%</td><td>intervir</td></tr>
+      <tr><td>25 a 50%</td><td class="n">56,1%</td><td class="n">60%</td><td>acompanhar de perto</td></tr>
+      <tr><td>50 a 75%</td><td class="n">64,2%</td><td class="n">39%</td><td>monitorar</td></tr>
+      <tr><td>acima de 75%</td><td class="n">77,5%</td><td class="n">9%</td><td>sem ação específica</td></tr>
+      </tbody></table>
+      <div class="dnote">A ordenação é perfeita: cada degrau de probabilidade corresponde a um degrau no resultado observado. No país, <b>1.396 municípios estão na faixa mais baixa, com 34% das crianças</b>; somando a faixa seguinte, chega-se a 51% de todas as crianças avaliadas.</div>`},
+
+    q5:{name:'Quais variáveis possuem maior influência?',badge:'permutação, individual e em bloco',bcls:'b-store',html:`
+      <table class="dtab"><thead><tr><th>Bloco embaralhado</th><th class="n">AUC</th><th class="n">Queda</th></tr></thead><tbody>
+      <tr><td>modelo completo</td><td class="n">0,886</td><td class="n">—</td></tr>
+      <tr><td>sem o ponto de partida (5 variáveis)</td><td class="n m">0,541</td><td class="n m">0,345</td></tr>
+      <tr><td>sem as 11 alavancas</td><td class="n">0,848</td><td class="n">0,038</td></tr>
+      <tr><td>sem o território (UF e região)</td><td class="n">0,799</td><td class="n">0,087</td></tr>
+      </tbody></table>
+      <div class="dnote"><b>Sem o ponto de partida, o modelo fica no nível do acaso.</b> O que mais influencia a previsão é o que ninguém muda de um ano para o outro: onde a rede estava. As alavancas explicam o que sobra, e é esse resto que a política consegue mover. Também é o que explica por que o modelo acerta mais as permanências do que as mudanças.</div>`}
+  };
+  const qnodes=[...document.querySelectorAll('.node[data-q]')];
+  const detailQ=document.getElementById('detail-q');
+  function pickQ(k){
+    qnodes.forEach(n=>n.classList.toggle('active',n.dataset.q===k));
+    const d=Q[k];
+    detailQ.innerHTML=`<div class="detail-head"><h3>${d.name}</h3><span class="badge ${d.bcls}">${d.badge}</span></div>${d.html}`;
+  }
+  qnodes.forEach(n=>n.addEventListener('click',()=>pickQ(n.dataset.q)));
+  pickQ('q1');
+</script>
+</body>
+</html>
