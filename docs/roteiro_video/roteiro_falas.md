@@ -32,6 +32,8 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 > Em 2024, o Brasil chegou a 59,2% das crianças alfabetizadas ao fim do segundo ano. A meta era 59,9%. Faltaram sete décimos de ponto.
 >
 > Só que esse número sai quando o ciclo já acabou. O gestor precisa saber quais redes chegam à meta e quais precisam de apoio, enquanto ainda dá tempo de agir.
+>
+> Uma observação de escopo: modelamos o ciclo de 2024. O resultado de 2025 já saiu no agregado nacional, mas ainda não existe por município e rede, que é o grão deste modelo.
 
 *Entrega: pausar depois de "sete décimos de ponto". A última frase é a ponte para a pipeline.*
 

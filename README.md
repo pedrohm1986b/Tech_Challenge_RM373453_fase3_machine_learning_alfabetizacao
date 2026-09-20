@@ -133,7 +133,8 @@ A **rede-município** é o conjunto de escolas da rede municipal, ou da rede est
 - **A rede privada fica fora da modelagem** (**D-011**): a meta pactuada é da rede pública, e é sobre ela que a política incide;
 - **A meta é a de 2024, de 59,9%,** pactuada no Compromisso Nacional Criança Alfabetizada. O país fechou o ano em 59,2%, logo abaixo dela;
 - **A partição é por município,** e não por rede: as duas redes de um mesmo município caem sempre do mesmo lado, para que nenhuma informação do treino chegue ao teste pela vizinhança;
-- **O contexto entra defasado.** O modelo prevê 2024 com informação de 2023 e anterior, de modo que a previsão seria possível antes de o resultado sair.
+- **O contexto entra defasado.** O modelo prevê 2024 com informação de 2023 e anterior, de modo que a previsão seria possível antes de o resultado sair;
+- **O ciclo modelado é 2024, e não 2025.** O resultado nacional de 2025 já foi divulgado, em 66,0%, mas apenas no agregado: **não existe taxa observada por município e rede para 2025** nas bases públicas. Na [fase anterior](https://github.com/pedrohm1986b/Tech_Challenge_RM373453_pipeline_alfabetizacao), o ciclo de 2025 aparece como estimativa preliminar, construída a partir de eventos simulados para exercitar a ingestão em fluxo, e declarada como tal. Um modelo supervisionado precisa de resposta observada no grão que prevê, e o único par disponível com resposta real é **contexto de 2023 e resultado de 2024**. Aplicar o modelo às condições de 2024 para projetar 2025 é possível e está registrado em evoluções futuras, mas seria uma previsão sem acerto medível até o INEP publicar o resultado municipal daquele ciclo.
 
 ## 5. Análise exploratória
 
@@ -413,6 +414,7 @@ A taxa da própria rede em 2023, seguida da UF e da taxa da mesma rede no estado
 
 ## 13. Evoluções futuras
 
+- **Projetar o ciclo de 2025** aplicando o modelo às condições de 2024, o que a parametrização do `prod_01` já permite, e confrontar a projeção com o resultado municipal quando ele for publicado;
 - **Retreinar no alvo de 2030,** de 80%, quando houver ciclos suficientes para sustentar a nova régua;
 - **Atualizar as fontes defasadas,** substituindo as variáveis de 2010 por medidas do Censo de 2022 equivalentes;
 - **Modelar a mudança, e não só o nível,** com alvo definido como variação entre ciclos, para atacar diretamente a limitação de permanência contra mudança;
