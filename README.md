@@ -144,9 +144,13 @@ A exploração (`desenv_02`) trabalhou o indicador no grão do município e do a
 
 A exploração (`desenv_02`) não foi um inventário de gráficos: foi uma **cadeia de perguntas**, em que cada resposta determinou a seguinte e, no fim, o desenho da modelagem.
 
-**Dá para distinguir duas crianças?** Não. Apenas 9,4% da variação do resultado individual está entre municípios; os outros **90,6% acontecem entre alunos do mesmo município**, e nenhuma variável desta base alcança essa diferença. O teto da tarefa já estava ali, esperando para ser medido.
+**Como é a resposta que vamos prever?** Ela não é uma observação direta: nasce de um corte na proficiência, em que quem alcança 743 pontos na escala do 2º ano é classificado como alfabetizado. E a linha cai praticamente sobre a moda da distribuição.
 
-**Então como ler a resposta?** O corte de 743 pontos na escala Saeb cai sobre a região mais densa das notas: **32,4% dos alunos ficam a menos de 20 pontos dele**. Perto da linha, um erro pequeno troca o lado, e foi daí que veio a decisão de ler o modelo por probabilidade, e não por acurácia.
+![Distribuição da proficiência e o ponto de corte](images/eda_corte_proficiencia.png)
+
+Isso tem consequência imediata: **8,3% dos alunos estão a menos de 5 pontos da linha**, 16,6% a menos de 10 e 32,4% a menos de 20. Para essa parcela, a diferença entre as duas classes é ruído. Foi daí que veio a decisão de não usar acurácia como métrica principal, e sim ler o modelo pela probabilidade.
+
+**Dá para distinguir duas crianças?** Não. Apenas 9,4% da variação do resultado individual está entre municípios; os outros **90,6% acontecem entre alunos do mesmo município**, e nenhuma variável desta base alcança essa diferença. O teto da tarefa já estava ali, esperando para ser medido.
 
 **Se não é o aluno, o que tem sinal?** O território. A amplitude entre UFs chega a **49,3 pontos**, de 36,0% na Bahia a 85,3% no Ceará, e dentro do estado as cidades grandes puxam o resultado para baixo: a capital paulista, com 94 mil alunos, alfabetiza 56,6%, menos que 7 em cada 10 municípios paulistas. A unidade que carrega sinal é a rede dentro do município.
 
