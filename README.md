@@ -6,6 +6,14 @@ Modelo supervisionado de machine learning para prever o cumprimento da meta de a
 
 ---
 
+## 🎥 Vídeo executivo da apresentação
+
+**▶️ [Assista à apresentação do projeto (até 5 min)](https://drive.google.com/file/d/1qtWgAVaHdEHYmsNXf0uZZWk3ieZ44g4z/view?usp=sharing)**
+
+> **Para o avaliador:** este é o vídeo executivo exigido no enunciado, no qual o projeto é apresentado em linguagem voltada a liderança e stakeholders: o problema de negócio, o caminho de desenvolvimento, a decisão que mudou o grão do modelo, as cinco respostas de negócio e as limitações declaradas. O link aponta para um arquivo no Google Drive com acesso de visualização. Caso o vídeo não abra, favor verificar as permissões de compartilhamento ou entrar em contato pelo e-mail do autor.
+
+---
+
 ## Sumário
 
 1. [Contexto do problema](#1-contexto-do-problema)

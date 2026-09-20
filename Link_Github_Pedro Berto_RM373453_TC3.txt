@@ -1,0 +1,4 @@
+Aluno: Pedro Henrique Martinez Bertolo
+Número da Matrícula: RM373453
+Link do trabalho Tech Challenge 3 (Machine Learning) no GitHub: https://github.com/pedrohm1986b/Tech_Challenge_RM373453_fase3_machine_learning_alfabetizacao
+Link vídeo da apresentação: https://drive.google.com/file/d/1qtWgAVaHdEHYmsNXf0uZZWk3ieZ44g4z/view?usp=sharing

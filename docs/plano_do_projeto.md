@@ -15,7 +15,7 @@ Roteiro das etapas de desenvolvimento, com a entrega esperada de cada uma e as d
 | 6 | Avaliação e interpretabilidade | métricas adequadas ao alvo, importância por permutação e dependência parcial | métrica principal de avaliação | ✅ concluída |
 | 7 | Aplicação estratégica | respostas às perguntas de negócio: fatores de maior impacto, municípios em maior risco, territórios com padrões semelhantes, projeção de atingimento de metas e variáveis mais influentes | critérios de classificação de risco | ✅ concluída |
 | 8 | Documentação final | README completo, relatórios e visualizações consolidadas | n/d | ✅ concluída |
-| 9 | Vídeo executivo | apresentação de até 5 minutos, simulando reunião com gestores públicos | n/d | ⬜ |
+| 9 | Vídeo executivo | apresentação de até 5 minutos, simulando reunião com gestores públicos | n/d | ✅ concluída |
 
 ## Convenções de trabalho
 
