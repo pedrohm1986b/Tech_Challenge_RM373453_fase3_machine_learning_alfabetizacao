@@ -1,13 +1,17 @@
 ,piora_log_loss,piora_auc,papel,nome
-rede_taxa_ant,2.00477,0.53906,ponto de partida,Taxa da própria rede em 2023
-turma_media_alunos,0.02839,0.01172,alavanca,turma_media_alunos
-esc_pct_rural,0.00593,0.00391,alavanca,esc_pct_rural
-mun_gap_meta,0.00304,0.00781,alavanca,mun_gap_meta
-mun_participacao_ant,0.00221,0.0,ponto de partida,Participação na avaliação em 2023
-rede_vs_uf,0.00119,0.0,alavanca,rede_vs_uf
-nome_regiao,0.0,0.0,ponto de partida,Região
-sigla_uf,0.0,0.0,ponto de partida,Unidade da federação
-rede_vs_municipio,-0.00191,0.0,alavanca,rede_vs_municipio
-rede_peso_no_municipio,-0.00441,0.00781,alavanca,rede_peso_no_municipio
-esc_pct_agua_rede,-0.00525,0.00391,alavanca,esc_pct_agua_rede
-esc_alunos_por_sala,-0.02135,0.01172,alavanca,esc_alunos_por_sala
+rede_taxa_ant,0.14535,0.10661,ponto de partida,Taxa da própria rede em 2023
+sigla_uf,0.07659,0.05471,ponto de partida,Unidade da federação
+uf_rede_taxa_ant,0.0611,0.03291,ponto de partida,Taxa da mesma rede no estado em 2023
+nome_regiao,0.01506,0.00728,ponto de partida,Região
+mun_participacao_ant,0.01238,0.00729,ponto de partida,Participação na avaliação em 2023
+esc_inse_medio,0.00919,0.00342,alavanca,Nível socioeconômico das famílias
+mun_populacao,0.00874,0.00451,alavanca,População do município
+mun_pct_maes_adolescentes,0.00782,0.00381,alavanca,Mães adolescentes
+mun_densidade_demografica,0.0043,0.00206,alavanca,Densidade demográfica
+esc_pct_quadra,0.00407,0.00258,alavanca,Escolas com quadra
+mun_pct_vulner_deslocamento_1h,0.0035,0.00135,alavanca,Pobres com mais de 1 hora de deslocamento
+esc_pct_docentes_alto_esforco,0.00268,0.00133,alavanca,Professores sobrecarregados
+esc_horas_aula_diarias,0.00247,0.00114,alavanca,Horas-aula por dia
+mun_idade_mediana,0.00239,0.00073,alavanca,Idade mediana da população
+esc_pct_biblioteca_ou_sala_leitura,0.00212,0.00085,alavanca,Escolas com biblioteca
+mun_indice_pre_escola,0.00066,0.0002,alavanca,Oferta de pré-escola

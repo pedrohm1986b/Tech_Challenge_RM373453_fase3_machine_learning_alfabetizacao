@@ -1,9 +1,9 @@
 variavel,etapa,situacao,motivo,numero
 esc_pct_energia_rede,A,sai,2. quase não varia,95% das redes no mesmo valor
 esc_pct_alimentacao,A,sai,2. quase não varia,94% das redes no mesmo valor
-rede_vs_uf,A,sai,3. explicada pelas outras (VIF),"VIF 39.007,1"
-mun_ivs,A,sai,4. par quase igual,"correlação -0,85"
-mun_gap_meta,A,sai,4. par quase igual,"correlação -0,82"
+rede_vs_uf,A,sai,3. explicada pelas outras (VIF),VIF 39007.1
+mun_ivs,A,sai,4. par quase igual,correlação 0.85
+mun_gap_meta,A,sai,4. par quase igual,correlação 0.82
 rede_taxa_ant,B,fica,,5 de 5 rodadas
 uf_rede_taxa_ant,B,fica,,5 de 5 rodadas
 rede_vs_municipio,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,3 de 5 rodadas

@@ -8,7 +8,7 @@
     "max_depth": 12
   },
   "criterio": "menor log-loss na validação cruzada; a regressão logística vence se ficar a menos de um desvio da melhor",
-  "selecao_de_variaveis": "etapa A (redundância) e etapa B (seleção por estabilidade), seção 2",
+  "selecao_de_variaveis": "etapa A (redundância) e etapa B (seleção por estabilidade)",
   "validacao_cruzada": {
     "auc": 0.89683,
     "auc_desvio": 0.00798,

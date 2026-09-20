@@ -130,7 +130,7 @@ A **rede-município** é o conjunto de escolas da rede municipal, ou da rede est
 | | |
 |---|---:|
 | redes-município | 6.535 |
-| municípios | 5.570 |
+| municípios com rede pública | 5.517 |
 | alunos de 2024 representados | 1.851.828 |
 | variável resposta | taxa ponderada de 2024 ≥ 59,9% (meta pactuada) |
 
@@ -462,7 +462,7 @@ python src/modeling/prod_04_pipeline_modelagem_parte2.py
 python src/evaluation/prod_05_aplicacao_estrategica.py
 ```
 
-Cada script grava em `reports/` os mesmos artefatos que o notebook correspondente, e todos param com erro se uma das verificações declaradas falhar. As etapas lentas podem ser puladas com o artefato já gravado: `--usar-busca-salva` nos dois primeiros modelos e `--usar-curadoria-salva` no `prod_04`.
+Cada script grava em `reports/` os mesmos artefatos que o notebook correspondente, e todos param com erro se uma das verificações declaradas falhar. Os três foram executados contra o data lake e reproduzem os notebooks: mesma curadoria, mesma família escolhida, mesma AUC e mesma matriz de confusão. As etapas lentas podem ser puladas com o artefato já gravado: `--usar-busca-salva` nos dois primeiros modelos e `--usar-curadoria-salva` no `prod_04`.
 
 > O data lake da Fase 2 é privado, e os caminhos em `config.json` apontam para o projeto GCP do autor. Para executar em outro ambiente, é preciso reconstruir o lake pela [fase anterior](https://github.com/pedrohm1986b/Tech_Challenge_RM373453_pipeline_alfabetizacao) e apontar a configuração para o novo bucket. As saídas de cada etapa ficam versionadas em `reports/`, o que permite acompanhar os resultados sem executar.
 

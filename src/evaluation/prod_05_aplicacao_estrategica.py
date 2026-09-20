@@ -85,23 +85,40 @@ LIMIAR = 0.5
 
 # Quem consegue mover cada fator, a direção esperada declarada antes de medir
 # (+ mais é melhor, - mais é pior, ? sem expectativa) e a pasta parceira
-FATORES = {
-    "mun_indice_pre_escola": ("Oferta de pré-escola", "educação", "+", ""),
-    "esc_horas_aula_diarias": ("Horas-aula por dia", "educação", "+", ""),
-    "esc_pct_biblioteca_ou_sala_leitura": ("Escolas com biblioteca", "educação", "+", ""),
-    "esc_pct_quadra": ("Escolas com quadra", "educação", "+", ""),
-    "esc_pct_docentes_alto_esforco": ("Professores sobrecarregados", "educação", "-", ""),
+FATORES = {   # nome, quem mexe, direção esperada, motivo, pasta parceira
+    "mun_indice_pre_escola": ("Oferta de pré-escola", "educação", "+",
+                              "quem passou pela pré-escola chega ao 1º ano familiarizado com "
+                              "letras e sons", ""),
+    "esc_horas_aula_diarias": ("Horas-aula por dia", "educação", "+",
+                               "mais tempo de aula dá mais contato com a leitura", ""),
+    "esc_pct_biblioteca_ou_sala_leitura": ("Escolas com biblioteca", "educação", "+",
+                                           "dá acesso a livros fora da sala de aula", ""),
+    "esc_pct_quadra": ("Escolas com quadra", "educação", "+",
+                       "indica escola com estrutura completa", ""),
+    "esc_pct_docentes_alto_esforco": ("Professores sobrecarregados", "educação", "-",
+                                      "sobra menos tempo para cada turma", ""),
     "mun_pct_maes_adolescentes": ("Mães adolescentes", "outra pasta", "-",
-                                  "saúde e assistência social"),
+                                  "mãe adolescente tem, em média, menos escolaridade e menos "
+                                  "apoio", "saúde e assistência social"),
     "esc_inse_medio": ("Nível socioeconômico das famílias", "outra pasta", "+",
-                       "assistência social e renda"),
-    "mun_pct_vulner_deslocamento_1h": ("Pobres com mais de 1 hora de deslocamento",
-                                       "outra pasta", "-", "mobilidade e transporte"),
+                       "famílias com mais escolaridade e renda apoiam mais a leitura; é alavanca "
+                       "de prazo longo, porque a política de renda muda a família antes de mudar "
+                       "o indicador", "assistência social e renda"),
+    "mun_pct_vulner_deslocamento_1h": ("Pobres com mais de 1 hora de deslocamento", "outra pasta",
+                                       "-", "longos deslocamentos cansam a família; o dado é de "
+                                       "2010 e aponta o problema, mas está velho para medir a "
+                                       "situação atual", "mobilidade e transporte"),
     "mun_densidade_demografica": ("Densidade demográfica", "outra pasta", "+",
+                                  "com a população concentrada, a escola fica mais perto; a "
+                                  "densidade não muda, mas a distância que ela representa se "
+                                  "trata com a localização das escolas e o transporte",
                                   "planejamento urbano e transporte"),
     "mun_idade_mediana": ("Idade mediana da população", "outra pasta", "+",
-                          "saúde e segurança pública"),
-    "mun_populacao": ("População do município", "território", "?", ""),
+                          "população mais jovem indica fecundidade alta, com mais crianças por "
+                          "família e gravidez precoce, e expectativa de vida menor, por mortes "
+                          "violentas e problemas de saúde", "saúde e segurança pública"),
+    "mun_populacao": ("População do município", "território", "?",
+                      "porte pode trazer estrutura ou complexidade", ""),
 }
 NOMES_PONTO_DE_PARTIDA = {
     "rede_taxa_ant": "Taxa da própria rede em 2023",
@@ -174,15 +191,15 @@ def responder_fatores(modelo, redes: pd.DataFrame, desenho: dict, variaveis: lis
         regioes = sum(np.sign(efeito(modelo, redes[redes["nome_regiao"] == r], desenho,
                                      variaveis, v, baixo, alto)) == np.sign(valor)
                       for r in REGIOES)
-        nome, quem, sinal, pasta = FATORES[v]
+        nome, quem, sinal, motivo, pasta = FATORES[v]
         obtido = "+" if valor >= 0 else "-"
-        linhas.append({"variavel": v, "nome": nome, "quem_mexe": quem, "pasta_parceira": pasta,
-                       "direcao_esperada": sinal, "p25": baixo, "p75": alto,
-                       "efeito_pp": valor, "regioes_mesmo_sinal": regioes,
+        linhas.append({"variavel": v, "nome": nome, "quem": quem, "sinal": sinal,
+                       "motivo": motivo, "pasta": pasta, "baixo": baixo, "alto": alto,
+                       "efeito_pp": valor, "regioes": regioes,
                        "confere": "sem expectativa" if sinal == "?"
                                   else ("sim" if sinal == obtido else "nao")})
     fatores = pd.DataFrame(linhas).set_index("variavel")
-    ordem = fatores["quem_mexe"].map({"educação": 0, "outra pasta": 1, "território": 2})
+    ordem = fatores["quem"].map({"educação": 0, "outra pasta": 1, "território": 2})
     fatores = (fatores.assign(ordem=ordem, absoluto=fatores["efeito_pp"].abs())
                .sort_values(["ordem", "absoluto"], ascending=[True, False])
                .drop(columns=["ordem", "absoluto"]))
@@ -455,7 +472,7 @@ def main() -> int:
     print("  P1  fatores de maior efeito, com o ponto de partida fixo")
     for v, f in fatores.head(3).iterrows():
         print(f"        {f['nome']:<42} {f['efeito_pp']:+.1f} pp "
-              f"({f['regioes_mesmo_sinal']} de 5 regioes)")
+              f"({f['regioes']} de 5 regioes)")
     print("  P2  risco educacional")
     print(f"        {risco['confirmadas']:,} redes confirmadas, {risco['alunos']:,} alunos")
     print(f"        taxa nacional {risco['taxa_nacional']:.1f}% -> "

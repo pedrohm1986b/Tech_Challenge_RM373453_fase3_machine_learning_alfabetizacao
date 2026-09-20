@@ -32,7 +32,7 @@ Roteiro das etapas de desenvolvimento, com a entrega esperada de cada uma e as d
 
 **Promoção concluída.** Todas as etapas têm o seu par em `src/`. O `prod_04` reaproveita o pipeline do `prod_03`, e o `prod_05` reconstrói o modelo pela receita registrada, com trava que confere a AUC no teste antes de seguir.
 
-Os três scripts novos foram verificados com base sintética, que exercita a agregação por rede, a etapa A da curadoria, o pré-processamento, a busca, a escolha da família e as cinco respostas. A **execução completa contra o data lake ainda não foi feita**, e é o que falta para dar a promoção por encerrada: os notebooks continuam sendo a evidência de execução dessas etapas.
+Os três scripts foram **executados de ponta a ponta contra o data lake** e reproduzem os notebooks: o `prod_03` em 15,7 min, escolhendo a regressão logística pelo mesmo critério; o `prod_04` em 23,2 min, com a mesma curadoria de 41 para 14 variáveis, a mesma família e AUC de 0,8856 no teste, com a matriz de confusão idêntica; e o `prod_05` em 4,4 min, com todas as respostas de negócio iguais às do notebook. As únicas diferenças nos artefatos são ruído de ponto flutuante no décimo quinto dígito e nomes de colunas.
 
 **Versionamento.** Toda etapa nasce em branch própria e chega à branch principal por Pull Request com descrição e comentário de revisão. As decisões analíticas relevantes são registradas no diário antes do merge.
 

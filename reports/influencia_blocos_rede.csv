@@ -1,5 +1,6 @@
 medida,variaveis_embaralhadas,auc,log_loss,queda_auc,piora_log_loss
-modelo completo,12,0.97656,0.20887,0.0,0.0
-sem o ponto de partida,4,0.38281,2.41246,0.59375,2.20359
-sem o território,2,0.97656,0.20887,0.0,0.0
-sem as medidas de 2023,2,0.35938,2.63003,0.61719,2.42116
+modelo completo,16,0.88564,0.41693,0.0,0.0
+sem o ponto de partida,5,0.54071,0.89577,0.34494,0.47883
+sem as alavancas,11,0.84816,0.47792,0.03748,0.06098
+sem o território,2,0.79916,0.53519,0.08648,0.11826
+sem as medidas de 2023,3,0.65652,0.71109,0.22912,0.29416
