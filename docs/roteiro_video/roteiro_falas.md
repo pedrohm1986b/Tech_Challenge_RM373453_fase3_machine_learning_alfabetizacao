@@ -23,7 +23,7 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 ## Slide 1 · Capa — 0:13
 
-> Olá pessoal, tudo bem? Me chamo Pedro, e hoje apresento o Tech Challenge da terceira fase: um modelo de machine learning para prever quem fica para trás na alfabetização. Vamo lá?
+> Olá pessoal, tudo bem? Me chamo Pedro, e hoje apresento o Tech Challenge da terceira fase: um modelo de machine learning que prevê o cumprimento da meta de alfabetização, rede por rede. Vamo lá?
 
 ---
 
@@ -31,7 +31,7 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 > Em 2024, o Brasil chegou a 59,2% das crianças alfabetizadas ao fim do segundo ano. A meta era 59,9%. Faltaram sete décimos de ponto.
 >
-> Só que esse número sai quando o ciclo já acabou. O gestor precisa saber quais redes não vão bater a meta enquanto ainda dá tempo de agir.
+> Só que esse número sai quando o ciclo já acabou. O gestor precisa saber quais redes chegam à meta e quais precisam de apoio, enquanto ainda dá tempo de agir.
 
 *Entrega: pausar depois de "sete décimos de ponto". A última frase é a ponte para a pipeline.*
 
@@ -119,7 +119,7 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 ## Slide 8 · Fecho — 0:19
 
-> Fica uma lista nominal de redes ordenada por impacto, um mapa de onde o problema se concentra e uma régua de prioridade com confiabilidade medida. Repetindo o método a cada ciclo, dá para saber quem fica para trás antes que o ano termine. Obrigado.
+> Fica uma lista nominal de redes ordenada por impacto, um mapa de onde o problema se concentra e uma régua de prioridade com confiabilidade medida. Repetindo o método a cada ciclo, dá para saber onde apoiar antes que o ano termine. Obrigado.
 
 *Entrega: feche com calma. "Obrigado" após uma pausa curta.*
 
