@@ -1,0 +1,42 @@
+variavel,etapa,situacao,motivo,numero
+esc_pct_energia_rede,A,sai,2. quase não varia,95% das redes no mesmo valor
+esc_pct_alimentacao,A,sai,2. quase não varia,94% das redes no mesmo valor
+rede_vs_uf,A,sai,3. explicada pelas outras (VIF),"VIF 39.007,1"
+mun_ivs,A,sai,4. par quase igual,"correlação -0,85"
+mun_gap_meta,A,sai,4. par quase igual,"correlação -0,82"
+rede_taxa_ant,B,fica,,5 de 5 rodadas
+uf_rede_taxa_ant,B,fica,,5 de 5 rodadas
+rede_vs_municipio,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,3 de 5 rodadas
+mun_participacao_ant,B,fica,,5 de 5 rodadas
+rede_peso_no_municipio,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,1 de 5 rodadas
+esc_alunos_por_sala,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,1 de 5 rodadas
+turma_media_alunos,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,2 de 5 rodadas
+esc_pct_rural,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,1 de 5 rodadas
+esc_pct_agua_rede,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,1 de 5 rodadas
+esc_pct_esgoto_rede,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,1 de 5 rodadas
+esc_pct_internet,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,2 de 5 rodadas
+esc_pct_biblioteca_ou_sala_leitura,B,fica,,5 de 5 rodadas
+esc_pct_lab_informatica,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+esc_pct_quadra,B,fica,,5 de 5 rodadas
+esc_pct_transporte,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+esc_pct_area_diferenciada,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,2 de 5 rodadas
+esc_pct_docentes_formacao_adequada,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+esc_pct_docentes_baixa_regularidade,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+esc_pct_docentes_alto_esforco,B,fica,,4 de 5 rodadas
+esc_alunos_por_docente,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+esc_horas_aula_diarias,B,fica,,5 de 5 rodadas
+mun_pib_per_capita,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+mun_pct_servicos,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,3 de 5 rodadas
+mun_populacao,B,fica,,5 de 5 rodadas
+mun_gini,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,1 de 5 rodadas
+mun_expectativa_estudo,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+mun_taxa_homicidio,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas
+mun_densidade_demografica,B,fica,,5 de 5 rodadas
+mun_idade_mediana,B,fica,,5 de 5 rodadas
+mun_pct_agua_rede_geral,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,1 de 5 rodadas
+esc_inse_medio,B,fica,,5 de 5 rodadas
+mun_pct_vulner_deslocamento_1h,B,fica,,4 de 5 rodadas
+mun_pct_maes_8_anos_estudo,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,3 de 5 rodadas
+mun_pct_maes_adolescentes,B,fica,,5 de 5 rodadas
+mun_indice_pre_escola,B,fica,,4 de 5 rodadas
+rede_nome,B,sai,pouco estável: fica em menos de 4 das 5 rodadas,0 de 5 rodadas

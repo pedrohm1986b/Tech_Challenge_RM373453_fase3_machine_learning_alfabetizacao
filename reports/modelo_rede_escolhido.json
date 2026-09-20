@@ -1,0 +1,44 @@
+{
+  "alvo": "a rede bateu a meta nacional de 2024 (59.9%)",
+  "familia": "random forest",
+  "parametros": {
+    "n_estimators": 400,
+    "min_samples_leaf": 5,
+    "max_features": 0.3,
+    "max_depth": 12
+  },
+  "criterio": "menor log-loss na validação cruzada; a regressão logística vence se ficar a menos de um desvio da melhor",
+  "selecao_de_variaveis": "etapa A (redundância) e etapa B (seleção por estabilidade), seção 2",
+  "validacao_cruzada": {
+    "auc": 0.89683,
+    "auc_desvio": 0.00798,
+    "log_loss": 0.40088,
+    "log_loss_desvio": 0.01076,
+    "brier": 0.12924
+  },
+  "validacao": {
+    "auc": 0.91134,
+    "log_loss": 0.37453,
+    "brier": 0.11824,
+    "auc_redes_20_alunos_ou_mais": 0.92474
+  },
+  "semente": 42,
+  "variaveis": [
+    "uf_rede_taxa_ant",
+    "rede_taxa_ant",
+    "mun_participacao_ant",
+    "mun_populacao",
+    "mun_pct_maes_adolescentes",
+    "esc_inse_medio",
+    "esc_horas_aula_diarias",
+    "mun_densidade_demografica",
+    "esc_pct_biblioteca_ou_sala_leitura",
+    "mun_idade_mediana",
+    "mun_indice_pre_escola",
+    "esc_pct_quadra",
+    "mun_pct_vulner_deslocamento_1h",
+    "esc_pct_docentes_alto_esforco",
+    "sigla_uf",
+    "nome_regiao"
+  ]
+}

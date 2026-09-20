@@ -7,15 +7,15 @@ Roteiro das etapas de desenvolvimento, com a entrega esperada de cada uma e as d
 | # | Etapa | Entrega | Decisões previstas | Status |
 |---|---|---|---|---|
 | 0 | Fundação | repositório, estrutura, README evolutivo e diário iniciado | grão de modelagem (D-001) | ✅ concluída |
-| 1 | Base analítica | tabela de modelagem: alunos presentes da camada Silver, com o contexto municipal da camada Gold defasado, e verificação explícita contra vazamento | seleção das variáveis de contexto, defasagem temporal, uso do peso amostral | ⬜ |
-| 2 | Análise exploratória | distribuições, correlações, perfis por rede e território, e as hipóteses analíticas que orientam a modelagem | variáveis candidatas a transformação e engenharia de atributos | ⬜ |
-| 3 | Enriquecimento externo | incorporação de fontes socioeconômicas públicas, guiada pelas hipóteses da etapa anterior | quais fontes entram e com qual justificativa | ⬜ |
-| 4 | Pipeline de pré-processamento | imputação, codificação de categóricas e escalonamento integrados ao modelo, com Scikit-learn | estratégias de imputação e de codificação | ⬜ |
-| 5 | Modelagem supervisionada | modelo de referência, modelos candidatos e otimização, com validação de corte temporal | algoritmo escolhido e critério da escolha | ⬜ |
-| 6 | Avaliação e interpretabilidade | métricas adequadas ao desbalanceamento, Feature Importance e SHAP | métrica principal de avaliação | ⬜ |
-| 7 | Aplicação estratégica | respostas às perguntas de negócio: fatores de maior impacto, municípios em maior risco, territórios com padrões semelhantes, projeção de atingimento de metas e variáveis mais influentes | critérios de classificação de risco | ⬜ |
-| 8 | Documentação final | README completo, relatórios e visualizações consolidadas | — | ⬜ |
-| 9 | Vídeo executivo | apresentação de até 5 minutos, simulando reunião com gestores públicos | — | ⬜ |
+| 1 | Base analítica | tabela de modelagem: alunos presentes da camada Silver, com o contexto municipal da camada Gold defasado, e verificação explícita contra vazamento | seleção das variáveis de contexto, defasagem temporal, uso do peso amostral | ✅ concluída |
+| 2 | Análise exploratória | distribuições, correlações, perfis por rede e território, e as hipóteses analíticas que orientam a modelagem | variáveis candidatas a transformação e engenharia de atributos | ✅ concluída |
+| 3 | Enriquecimento externo | incorporação de fontes socioeconômicas públicas, guiada pelas hipóteses da etapa anterior | quais fontes entram e com qual justificativa | ✅ concluída |
+| 4 | Pipeline de pré-processamento | imputação, codificação de categóricas e escalonamento integrados ao modelo, com Scikit-learn | estratégias de imputação e de codificação | ✅ concluída |
+| 5 | Modelagem supervisionada | modelo de referência, modelos candidatos e otimização, com validação de corte temporal | algoritmo escolhido e critério da escolha | ✅ concluída |
+| 6 | Avaliação e interpretabilidade | métricas adequadas ao alvo, importância por permutação e dependência parcial | métrica principal de avaliação | ✅ concluída |
+| 7 | Aplicação estratégica | respostas às perguntas de negócio: fatores de maior impacto, municípios em maior risco, territórios com padrões semelhantes, projeção de atingimento de metas e variáveis mais influentes | critérios de classificação de risco | ✅ concluída |
+| 8 | Documentação final | README completo, relatórios e visualizações consolidadas | n/d | ✅ concluída |
+| 9 | Vídeo executivo | apresentação de até 5 minutos, simulando reunião com gestores públicos | n/d | ⬜ |
 
 ## Convenções de trabalho
 
@@ -26,7 +26,11 @@ Roteiro das etapas de desenvolvimento, com a entrega esperada de cada uma e as d
 | `desenv_01_base_analitica.ipynb` | `preprocessing/prod_01_base_analitica.py` | 1 |
 | `desenv_02_analise_exploratoria.ipynb` | (sem par: análise) | 2 |
 | `desenv_03_pipeline_modelagem.ipynb` | `modeling/prod_03_pipeline_modelagem.py` | 4 e 5 |
-| `desenv_04_avaliacao_interpretabilidade.ipynb` | `evaluation/prod_04_avaliacao.py` | 6 |
+| `desenv_04_pipeline_modelagem_parte2.ipynb` | `modeling/prod_04_pipeline_modelagem_parte2.py` | 5 e 6 |
+| `desenv_05_aplicacao_estrategica.ipynb` | `evaluation/prod_05_aplicacao_estrategica.py` | 7 |
+
+
+**Pendência declarada.** Os scripts `prod_03`, `prod_04` e `prod_05` ainda não foram promovidos: os notebooks correspondentes são, por ora, a versão reproduzível dessas etapas. A promoção entra em Pull Request própria.
 
 **Versionamento.** Toda etapa nasce em branch própria e chega à branch principal por Pull Request com descrição e comentário de revisão. As decisões analíticas relevantes são registradas no diário antes do merge.
 
