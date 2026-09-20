@@ -413,7 +413,6 @@ A taxa da própria rede em 2023, seguida da UF e da taxa da mesma rede no estado
 
 ## 13. Evoluções futuras
 
-- **Promover ao código de produção** os notebooks `desenv_03`, `desenv_04` e `desenv_05`, no padrão já usado em `src/preprocessing/prod_01_base_analitica.py`;
 - **Retreinar no alvo de 2030,** de 80%, quando houver ciclos suficientes para sustentar a nova régua;
 - **Atualizar as fontes defasadas,** substituindo as variáveis de 2010 por medidas do Censo de 2022 equivalentes;
 - **Modelar a mudança, e não só o nível,** com alvo definido como variação entre ciclos, para atacar diretamente a limitação de permanência contra mudança;
@@ -426,7 +425,18 @@ pip install -r requirements.txt
 cp config/config.example.json config/config.json   # preencher projeto e bucket
 ```
 
-O acesso ao lake usa a conta Google autorizada pelo navegador, via `pydata-google-auth`, na primeira execução de cada notebook. Os notebooks são executados na ordem `desenv_01` a `desenv_05`, cada um do diretório `notebooks/`.
+O acesso ao lake usa a conta Google autorizada pelo navegador, via `pydata-google-auth`, na primeira execução.
+
+**Duas formas de rodar.** Os notebooks, em `notebooks/`, são o desenvolvimento documentado célula a célula, na ordem `desenv_01` a `desenv_05`. Os scripts, em `src/`, são a versão reproduzível das mesmas etapas, sem as figuras e sem as tabelas de leitura:
+
+```bash
+python src/preprocessing/prod_01_base_analitica.py
+python src/modeling/prod_03_pipeline_modelagem.py
+python src/modeling/prod_04_pipeline_modelagem_parte2.py
+python src/evaluation/prod_05_aplicacao_estrategica.py
+```
+
+Cada script grava em `reports/` os mesmos artefatos que o notebook correspondente, e todos param com erro se uma das verificações declaradas falhar. As etapas lentas podem ser puladas com o artefato já gravado: `--usar-busca-salva` nos dois primeiros modelos e `--usar-curadoria-salva` no `prod_04`.
 
 > O data lake da Fase 2 é privado, e os caminhos em `config.json` apontam para o projeto GCP do autor. Para executar em outro ambiente, é preciso reconstruir o lake pela [fase anterior](https://github.com/pedrohm1986b/Tech_Challenge_RM373453_pipeline_alfabetizacao) e apontar a configuração para o novo bucket. As saídas de cada etapa ficam versionadas em `reports/`, o que permite acompanhar os resultados sem executar.
 
@@ -443,12 +453,19 @@ O acesso ao lake usa a conta Google autorizada pelo navegador, via `pydata-googl
 │   ├── modelo_rede_escolhido.json     # a receita do modelo final
 │   ├── avaliacao_teste_rede.csv       # desempenho no teste
 │   ├── fatores_meta_2024.csv          # efeito de cada alavanca
+│   ├── redes_risco_2024.csv           # lista nominal das redes em risco
+│   ├── semelhanca_regioes.csv         # distribuição e sobreposição por região
+│   ├── faixas_probabilidade.csv       # resultado observado em cada faixa
 │   ├── influencia_variaveis_rede.csv  # importância por permutação
-│   └── redes_risco_2024.csv           # lista nominal das redes em risco
+│   └── influencia_blocos_rede.csv     # a mesma medida, por bloco de variáveis
 ├── src/
-│   ├── preprocessing/     # preparação de dados e engenharia de atributos
-│   ├── modeling/          # treinamento e otimização dos modelos
-│   ├── evaluation/        # métricas, validação e interpretabilidade
+│   ├── preprocessing/
+│   │   └── prod_01_base_analitica.py            # tabela analítica e enriquecimento
+│   ├── modeling/
+│   │   ├── prod_03_pipeline_modelagem.py        # pipeline e modelo no grão do aluno
+│   │   └── prod_04_pipeline_modelagem_parte2.py # curadoria e modelo no grão da rede
+│   ├── evaluation/
+│   │   └── prod_05_aplicacao_estrategica.py     # as cinco perguntas de negócio
 │   └── visualization/     # gráficos e visualizações
 ├── requirements.txt
 └── README.md
