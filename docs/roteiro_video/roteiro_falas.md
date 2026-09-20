@@ -33,7 +33,7 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 >
 > Só que esse número sai quando o ciclo já acabou. O gestor precisa saber quais redes chegam à meta e quais precisam de apoio, enquanto ainda dá tempo de agir.
 >
-> Uma observação de escopo: modelamos o ciclo de 2024. O resultado de 2025 já saiu no agregado nacional, mas ainda não existe por município e rede, que é o grão deste modelo.
+> Uma observação de escopo: modelamos o ciclo de 2024. O resultado de 2025 já saiu no agregado nacional, mas ainda não existe por município e rede, que é o grão que adotamos. E há um segundo motivo: as variáveis que enriquecem o modelo estão temporalmente mais próximas de 2024, então prever 2025 afastaria ainda mais a explicação da resposta.
 
 *Entrega: pausar depois de "sete décimos de ponto". A última frase é a ponte para a pipeline.*
 
