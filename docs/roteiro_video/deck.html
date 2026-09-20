@@ -149,6 +149,20 @@
 
   .close-line{font-family:var(--font-d);font-weight:800;text-transform:uppercase;font-size:clamp(20px,3vw,38px);line-height:1.08;margin-top:auto;padding-top:26px;max-width:30ch}
 
+  .shot{background:#fff;border:1px solid var(--line2);border-radius:12px;padding:10px 10px 6px;
+    box-shadow:0 18px 40px -26px rgba(0,0,0,.9)}
+  .shot img{width:100%;display:block;border-radius:6px}
+  .shot figcaption{font-family:var(--font-m);font-size:9.5px;color:#6b6b73;letter-spacing:.06em;
+    padding:7px 2px 2px;line-height:1.35}
+  .withshot{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;align-items:start}
+  .ctx-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,4vw,52px);align-items:center}
+  .shot-wide{margin-top:18px}
+  .metric-row.compact{grid-template-columns:repeat(2,1fr);gap:10px}
+  .metric-row.compact .metric{padding:12px 14px}
+  .metric-row.compact .v{font-size:clamp(22px,2.6vw,30px)}
+
+  @media(max-width:820px){.withshot,.ctx-grid{grid-template-columns:1fr}}
+
   body.snapping .glow{display:none!important}
   body.snapping .stat-huge{background:none!important;-webkit-text-fill-color:var(--cyan)!important;color:var(--cyan)!important}
 
@@ -178,16 +192,24 @@
     <div class="bg-grid"></div>
     <div class="glow" style="width:500px;height:500px;background:var(--cyan);top:-100px;right:0"></div>
     <div class="kicker">Contexto · a necessidade</div>
-    <div class="stat-huge">59,2%</div>
-    <div class="lead" style="margin-top:10px">das crianças da rede pública alfabetizadas ao fim do 2º ano em 2024 — contra a meta pactuada de <b class="w">59,9%</b>. Faltaram sete décimos de ponto.</div>
-    <div class="metas">
-      <span class="num lo">59,9%<small>meta 2024</small></span>
-      <span class="bar"></span>
-      <span class="num hi">80%<small>meta 2030</small></span>
-    </div>
-    <div class="q-box">
-      <div class="q">"Quais redes chegam à meta, e quais precisam de apoio para chegar?"</div>
-      <div class="a">a média nacional não diz onde agir; o resultado só sai quando o ciclo já acabou.</div>
+    <div class="ctx-grid">
+      <div>
+        <div class="stat-huge">59,2%</div>
+        <div class="lead" style="margin-top:10px">das crianças da rede pública alfabetizadas ao fim do 2º ano em 2024 — contra a meta pactuada de <b class="w">59,9%</b>. Faltaram sete décimos de ponto.</div>
+        <div class="metas">
+          <span class="num lo">59,9%<small>meta 2024</small></span>
+          <span class="bar"></span>
+          <span class="num hi">80%<small>meta 2030</small></span>
+        </div>
+        <div class="q-box">
+          <div class="q">"Quais redes chegam à meta, e quais precisam de apoio para chegar?"</div>
+          <div class="a">a média nacional não diz onde agir; o resultado só sai quando o ciclo já acabou.</div>
+        </div>
+      </div>
+      <figure class="shot">
+        <img src="../../images/eda_mapa_alfabetizacao_uf.png" alt="Taxa de alfabetização por UF">
+        <figcaption>A média esconde 30 pontos de amplitude entre as UFs · desenv_02</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -287,11 +309,17 @@
         <span class="hl">acurácia não é usada</span>
       </div>
     </div>
-    <div class="metric-row">
-      <div class="metric"><div class="v">0,886</div><div class="l">AUC no teste<br>1.104 municípios nunca vistos</div></div>
-      <div class="metric"><div class="v">0,769</div><div class="l">AUC de repetir 2023<br>a referência sem modelo</div></div>
-      <div class="metric"><div class="v">76%</div><div class="l">sensibilidade<br>redes fora da meta encontradas</div></div>
-      <div class="metric"><div class="v m">59%</div><div class="l">sensibilidade da referência<br>o que se perderia sem modelo</div></div>
+    <div class="withshot shot-wide">
+      <figure class="shot">
+        <img src="../../images/ml_roc_calibracao_teste.png" alt="Curva ROC e calibração no teste">
+        <figcaption>Ordenação e calibração na partição de teste · cada modelo no seu escopo · desenv_04</figcaption>
+      </figure>
+      <div class="metric-row compact">
+        <div class="metric"><div class="v">0,886</div><div class="l">AUC no teste<br>1.104 municípios nunca vistos</div></div>
+        <div class="metric"><div class="v">0,769</div><div class="l">AUC de repetir 2023<br>a referência sem modelo</div></div>
+        <div class="metric"><div class="v">76%</div><div class="l">sensibilidade<br>redes fora da meta encontradas</div></div>
+        <div class="metric"><div class="v m">59%</div><div class="l">sensibilidade da referência<br>o que se perderia sem modelo</div></div>
+      </div>
     </div>
   </section>
 
@@ -459,12 +487,12 @@
       <div class="dnote"><b>Por que enriquecer.</b> O lake da fase anterior mede o indicador, mas traz quase só a resposta. Sem as fontes externas, a única variável explicativa seria a taxa do ano anterior: o modelo repetiria o passado, sem nada sobre o que um gestor possa agir.</div>`},
 
     eda:{name:'Análise exploratória',badge:'desenv_02 · hipóteses declaradas',bcls:'b-store',html:`
-      <ul class="dlist">
+      <div class="withshot"><div><ul class="dlist">
         <li>A desigualdade é territorial antes de ser escolar: mais de 30 pontos de amplitude entre UFs</li>
         <li>A taxa municipal depende do cálculo — média das taxas ou taxa entre alunos, com o peso do INEP</li>
         <li>As associações no grão do aluno são fracas e não lineares, o que já antecipava o teto da tarefa</li>
         <li>Cada variável candidata entra com <b style="color:var(--text)">hipótese escrita antes</b> da medição, com a direção esperada</li>
-      </ul>
+      </ul></div><figure class="shot"><img src="../../images/eda_distribuicao_taxa_municipal.png" alt=""><figcaption>Distribuição da taxa municipal · desenv_02</figcaption></figure></div>
       <div class="dnote"><b>Por que declarar a hipótese antes.</b> Sem isso, qualquer resultado vira confirmação. Com a direção declarada, o sinal contrário ao esperado é evidência de problema, não descoberta.</div>`},
 
     pipeline:{name:'Pipeline de pré-processamento',badge:'scikit-learn · sem vazamento',bcls:'b-batch',html:`
@@ -486,12 +514,12 @@
       <div class="dnote"><b>O teto.</b> Como todas as variáveis são iguais para os alunos da mesma rede, nenhum modelo passa de 0,701 nesse grão. O nosso chegou a 0,673, quase colado no teto e a apenas <b>+0,030</b> de repetir o ano anterior. Funciona, mas não sustenta decisão.</div>`},
 
     rede:{name:'Modelo 2 · grão da rede',badge:'desenv_04 · a entrega',bcls:'b-stream',html:`
-      <div class="dsplit">
+      <div class="withshot"><div><div class="dsplit">
         <div class="dblk"><div class="dt m">A mudança</div>
           <p>A unidade prevista passa a ser a <b style="color:var(--text)">rede de ensino de cada município</b>: 6.535 unidades. Alinha o grão das variáveis, o grão da resposta e o grão em que a política é decidida.</p></div>
         <div class="dblk"><div class="dt">A curadoria</div>
           <p>De 41 para 14 variáveis em duas etapas objetivas, mais UF e região como ponto de partida. Prevê melhor com 16 do que com 41, e fica explicável.</p></div>
-      </div>
+      </div></div><figure class="shot"><img src="../../images/ml_curadoria_variaveis.png" alt=""><figcaption>Eliminação regressiva em cinco rodadas: o ponto marca o melhor conjunto · desenv_04</figcaption></figure></div>
       <div class="dnote"><b>0,886 de AUC</b> em 1.104 municípios que nenhuma etapa viu, contra 0,769 de repetir 2023. Encontra <b>três de cada quatro</b> redes que não cumprem a meta.</div>`},
 
     aplicacao:{name:'Aplicação estratégica',badge:'desenv_05 · 5 perguntas',bcls:'b-store',html:`
@@ -548,41 +576,41 @@
       <div class="dnote"><b>Os maiores efeitos estão fora da escola</b>, e isso não tira a responsabilidade da educação: coloca parte da solução em outras pastas. Efeitos medidos entre redes que partiram do mesmo lugar, o que explica por que nenhum passa de 3,5 pontos.</div>`},
 
     q2:{name:'Quais municípios apresentam maior risco?',badge:'2.380 redes · 820 mil alunos',bcls:'b-stream',html:`
-      <table class="dtab"><thead><tr><th>Município</th><th>Rede</th><th class="n">Alunos</th><th class="n">Ganho no país</th></tr></thead><tbody>
+      <div class="withshot"><div><table class="dtab"><thead><tr><th>Município</th><th>Rede</th><th class="n">Alunos</th><th class="n">Ganho no país</th></tr></thead><tbody>
       <tr><td>São Paulo · SP</td><td>Municipal</td><td class="n">41.751</td><td class="n">+0,271 pp</td></tr>
       <tr><td>Salvador · BA</td><td>Municipal</td><td class="n">12.112</td><td class="n">+0,133 pp</td></tr>
       <tr><td>Manaus · AM</td><td>Municipal</td><td class="n">18.666</td><td class="n">+0,114 pp</td></tr>
       <tr><td>Porto Alegre · RS</td><td>Estadual</td><td class="n">4.904</td><td class="n">+0,088 pp</td></tr>
       <tr><td><b>as 15 primeiras</b></td><td></td><td class="n"></td><td class="n m">+1,25 pp</td></tr>
-      </tbody></table>
+      </tbody></table></div><figure class="shot"><img src="../../images/app_mapa_municipios_alerta.png" alt=""><figcaption>Municípios por faixa de probabilidade: à esquerda os de chance pequena, à direita somando a chance média · desenv_05</figcaption></figure></div>
       <div class="dnote"><b>Quinze redes colocariam o país acima da meta de 2024</b>: de 59,2% para 60,45%. Mas elas valem só um quinto do ganho possível: metade exige 134 redes, e o resto está espalhado por mais de duas mil. Um plano restrito às capitais melhora o indicador e não muda o mapa.</div>`},
 
     q3:{name:'Quais regiões possuem padrões semelhantes?',badge:'duas duplas',bcls:'b-store',html:`
-      <table class="dtab"><thead><tr><th>Região</th><th class="n">Probabilidade mediana</th><th class="n">até 25%</th><th class="n">acima de 75%</th></tr></thead><tbody>
+      <div class="withshot"><div><table class="dtab"><thead><tr><th>Região</th><th class="n">Probabilidade mediana</th><th class="n">até 25%</th><th class="n">acima de 75%</th></tr></thead><tbody>
       <tr><td>Norte</td><td class="n">14%</td><td class="n m">66%</td><td class="n">11%</td></tr>
       <tr><td>Nordeste</td><td class="n">30%</td><td class="n m">46%</td><td class="n">23%</td></tr>
       <tr><td>Sul</td><td class="n">60%</td><td class="n">19%</td><td class="n">37%</td></tr>
       <tr><td>Centro-Oeste</td><td class="n">81%</td><td class="n">9%</td><td class="n">56%</td></tr>
       <tr><td>Sudeste</td><td class="n">88%</td><td class="n">6%</td><td class="n">69%</td></tr>
-      </tbody></table>
+      </tbody></table></div><figure class="shot"><img src="../../images/app_silhuetas_regiao.png" alt=""><figcaption>A silhueta de cada região na escala de probabilidade · desenv_05</figcaption></figure></div>
       <div class="dnote"><b>Norte e Nordeste (79% de sobreposição) e Centro-Oeste e Sudeste (88%).</b> A diferença entre os dois lados não é de natureza, é de grau: são os mesmos fatores em posições diferentes da régua. O Nordeste é a única região com peso nas duas pontas, o que desaconselha política regional única.</div>`},
 
     q4:{name:'Como prever quem pode não atingir metas futuras?',badge:'confiabilidade por faixa',bcls:'b-batch',html:`
-      <table class="dtab"><thead><tr><th>Faixa de probabilidade</th><th class="n">Taxa mediana 2024</th><th class="n">Não cumpriram</th><th>Dose de política</th></tr></thead><tbody>
+      <div class="withshot"><div><table class="dtab"><thead><tr><th>Faixa de probabilidade</th><th class="n">Taxa mediana 2024</th><th class="n">Não cumpriram</th><th>Dose de política</th></tr></thead><tbody>
       <tr><td>até 25%</td><td class="n">42,0%</td><td class="n m">89%</td><td>intervir</td></tr>
       <tr><td>25 a 50%</td><td class="n">56,1%</td><td class="n">60%</td><td>acompanhar de perto</td></tr>
       <tr><td>50 a 75%</td><td class="n">64,2%</td><td class="n">39%</td><td>monitorar</td></tr>
       <tr><td>acima de 75%</td><td class="n">77,5%</td><td class="n">9%</td><td>sem ação específica</td></tr>
-      </tbody></table>
+      </tbody></table></div><figure class="shot"><img src="../../images/app_faixas_probabilidade.png" alt=""><figcaption>O resultado observado em cada faixa, na partição de teste · desenv_05</figcaption></figure></div>
       <div class="dnote">A ordenação é perfeita: cada degrau de probabilidade corresponde a um degrau no resultado observado. No país, <b>1.396 municípios estão na faixa mais baixa, com 34% das crianças</b>; somando a faixa seguinte, chega-se a 51% de todas as crianças avaliadas.</div>`},
 
     q5:{name:'Quais variáveis possuem maior influência?',badge:'permutação, individual e em bloco',bcls:'b-store',html:`
-      <table class="dtab"><thead><tr><th>Bloco embaralhado</th><th class="n">AUC</th><th class="n">Queda</th></tr></thead><tbody>
+      <div class="withshot"><div><table class="dtab"><thead><tr><th>Bloco embaralhado</th><th class="n">AUC</th><th class="n">Queda</th></tr></thead><tbody>
       <tr><td>modelo completo</td><td class="n">0,886</td><td class="n">—</td></tr>
       <tr><td>sem o ponto de partida (5 variáveis)</td><td class="n m">0,541</td><td class="n m">0,345</td></tr>
       <tr><td>sem as 11 alavancas</td><td class="n">0,848</td><td class="n">0,038</td></tr>
       <tr><td>sem o território (UF e região)</td><td class="n">0,799</td><td class="n">0,087</td></tr>
-      </tbody></table>
+      </tbody></table></div><figure class="shot"><img src="../../images/app_influencia_variaveis.png" alt=""><figcaption>Influência de cada variável, por permutação no teste · desenv_05</figcaption></figure></div>
       <div class="dnote"><b>Sem o ponto de partida, o modelo fica no nível do acaso.</b> O que mais influencia a previsão é o que ninguém muda de um ano para o outro: onde a rede estava. As alavancas explicam o que sobra, e é esse resto que a política consegue mover. Também é o que explica por que o modelo acerta mais as permanências do que as mudanças.</div>`}
   };
   const qnodes=[...document.querySelectorAll('.node[data-q]')];
