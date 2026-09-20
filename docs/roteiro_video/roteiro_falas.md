@@ -6,40 +6,40 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 ## Mapa de tempo
 
-| # | Slide | Palavras | Tempo | Acumulado |
-|---|---|---:|---:|---:|
-| 1 | Capa | 31 | 0:13 | 0:13 |
-| 2 | Contexto | 51 | 0:22 | 0:35 |
-| 3 | **Pipeline de desenvolvimento** | 156 | **1:07** | 1:42 |
-| 4 | A virada de grão | 97 | 0:42 | 2:24 |
-| 5 | O modelo da rede | 75 | 0:32 | 2:56 |
-| 6 | **As cinco respostas** | 223 | **1:36** | 4:31 |
-| 7 | O que o modelo não faz | 60 | 0:26 | 4:57 |
-| 8 | Fecho | 44 | 0:19 | 5:16 |
+| # | Slide | Palavras | No seu ritmo | Pausado | Acumulado |
+|---|---|---:|---:|---:|---:|
+| 1 | Capa | 34 | 0:11 | 0:15 | 0:11 |
+| 2 | Contexto | 95 | 0:32 | 0:41 | 0:43 |
+| 3 | **Pipeline de desenvolvimento** | 307 | 1:42 | 2:12 | 2:25 |
+| 4 | A virada de grão | 90 | 0:30 | 0:39 | 2:55 |
+| 5 | O modelo da rede | 69 | 0:23 | 0:30 | 3:18 |
+| 6 | **As cinco respostas** | 218 | 1:13 | 1:33 | 4:31 |
+| 7 | O que o modelo não faz | 49 | 0:16 | 0:21 | 4:47 |
+| 8 | Fecho | 42 | 0:14 | 0:18 | 5:01 |
 
-**Total: 737 palavras.** A régua importa mais que a estimativa: o roteiro da Fase 2 tinha **906 palavras** nos mesmos 5 minutos, o que dá o seu ritmo real de cerca de **180 palavras por minuto**. Nessa régua, este roteiro dá **4:05**, com folga de quase um minuto; a 140 palavras por minuto, daria 5:16. O ensaio cronometrado decide. Se faltar tempo, os cortes saem nesta ordem: o terceiro parágrafo do slide 5, a resposta 5 do slide 6 e o segundo parágrafo do slide 4.
+**Total: 904 palavras.** No seu ritmo medido na Fase 2, cerca de 180 palavras por minuto, isso dá **5:01**; no ritmo pausado de 140, daria 6:27. O ensaio cronometrado decide. Se faltar tempo, os cortes saem nesta ordem: o terceiro parágrafo do slide 5, a resposta 5 do slide 6 e o segundo exemplo da exploração no slide 3.
 
 ---
 
-## Slide 1 · Capa — 0:13
+## Slide 1 · Capa — 0:11
 
 > Olá pessoal, tudo bem? Me chamo Pedro, e hoje apresento o Tech Challenge da terceira fase: um modelo de machine learning que prevê o cumprimento da meta de alfabetização, rede por rede. Vamo lá?
 
 ---
 
-## Slide 2 · Contexto — 0:22
+## Slide 2 · Contexto — 0:38
 
 > Em 2024, o Brasil chegou a 59,2% das crianças alfabetizadas ao fim do segundo ano. A meta era 59,9%. Faltaram sete décimos de ponto.
 >
 > Só que esse número sai quando o ciclo já acabou. O gestor precisa saber quais redes chegam à meta e quais precisam de apoio, enquanto ainda dá tempo de agir.
 >
-> Uma observação de escopo: modelamos o ciclo de 2024. O resultado de 2025 já saiu no agregado nacional, mas ainda não existe por município e rede, que é o grão que adotamos. E há um segundo motivo: as variáveis que enriquecem o modelo estão temporalmente mais próximas de 2024, então prever 2025 afastaria ainda mais a explicação da resposta.
+> Uma observação de escopo: modelamos o ciclo de 2024. O resultado de 2025 saiu no agregado nacional, mas ainda não existe por município e rede, que é o grão que adotamos, e as variáveis explicativas também estão mais próximas de 2024.
 
 *Entrega: pausar depois de "sete décimos de ponto". A última frase é a ponte para a pipeline.*
 
 ---
 
-## Slide 3 · Pipeline de desenvolvimento — 1:07  ⟵ principal
+## Slide 3 · Pipeline de desenvolvimento — 1:42  ⟵ principal
 
 **Abertura, sem clique (0:06)**
 
@@ -49,25 +49,33 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 > A linha vem do microdado do aluno e o contexto vem do município, sempre defasado: 2024 é previsto com dado de 2023.
 >
-> E aqui veio a primeira decisão. O lake da fase anterior traz quase só a resposta. Sem enriquecimento, a única variável explicativa seria a taxa do ano anterior, e o modelo só saberia repetir o passado. Por isso trouxemos sete fontes públicas, do Censo Escolar ao Atlas do Desenvolvimento Humano.
+> E aqui veio a primeira decisão. O lake da fase anterior traz quase só a resposta: sem enriquecimento, a única variável explicativa seria a taxa do ano anterior, e o modelo só saberia repetir o passado. Por isso trouxemos sete fontes públicas.
 
-**[clicar em EXPLORAÇÃO, depois em PIPELINE]**
+**[clicar em EXPLORAÇÃO] (0:50)**
+
+> Na etapa seguinte fizemos a análise exploratória, com estatísticas descritivas para entender a base e tirar observações. Pra não prejudicar o tempo, cito três exemplos do que essa etapa trouxe para o trabalho.
+>
+> Primeiro: olhando de bate-pronto o histograma das notas, vimos que a linha de corte já cai sobre uma área de grande densidade. Ou seja, por melhor que fosse, o modelo não poderia ser avaliado por acurácia, porque cerca de um terço das crianças está a vinte pontos de atingir a proficiência.
+>
+> Segundo: a desigualdade não é só entre regiões, é entre estados da mesma região. Os dois extremos do país estão no Nordeste: a Bahia com 36% e o Ceará com 85%.
+>
+> E terceiro: o resultado do ano anterior é o que mais explica o ano seguinte, com correlação de 0,665. A exceção é o Rio Grande do Sul, que cai dezoito pontos em 2024, o ano das enchentes. Foi isso que definiu a inércia como a referência que o modelo precisa superar.
+
+**[clicar em PIPELINE] (0:10)**
 
 > Cada variável entrou com hipótese escrita antes da medição, e o pré-processamento vive dentro do pipeline, com partição por município: nada é aprendido fora do treino.
 
 **[clicar em MODELO 1, depois MODELO 2 e APLICAÇÃO] (0:15)**
 
-> O primeiro modelo seguiu o enunciado à risca e tentou prever cada criança. Ele nos mostrou um limite, que é o ponto central do projeto. O segundo mudou a unidade para a rede de cada município, e a aplicação responde as cinco perguntas sobre o modelo pronto.
+> O primeiro modelo seguiu o enunciado à risca e tentou prever cada criança, e nos mostrou um limite. O segundo mudou a unidade para a rede de cada município, e a aplicação responde as cinco perguntas sobre o modelo pronto.
 
 *Entrega: é o slide de demonstrar domínio. Clicar só ao terminar a frase anterior.*
 
 ---
 
-## Slide 4 · A virada de grão — 0:42
+## Slide 4 · A virada de grão — 0:30
 
-> Nenhuma das nossas fontes descreve a criança: todas têm grão de escola, rede ou município. Duas crianças da mesma sala chegam ao modelo idênticas, e ainda assim uma é alfabetizada e a outra não.
->
-> Medimos isso: 90% da variação está dentro da rede, e o máximo alcançável ali são 0,70 de AUC. O modelo chegou a 0,673, colado no teto e a três centésimos de repetir o ano anterior.
+> Aqui está o limite que a exploração já anunciava. Nenhuma das nossas fontes descreve a criança: duas crianças da mesma sala chegam ao modelo idênticas, e ainda assim uma é alfabetizada e a outra não. O máximo alcançável nesse grão são 0,70 de AUC, e o modelo chegou a 0,673, colado no teto e a três centésimos de repetir o ano anterior.
 >
 > Mudando a unidade para a rede, ele vai a 0,886, e a distância para a regra trivial quadruplica. O que isso mostra é onde os dados têm informação.
 
@@ -75,9 +83,9 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 ---
 
-## Slide 5 · O modelo da rede — 0:32
+## Slide 5 · O modelo da rede — 0:23
 
-> Três passos. Curadoria: de 41 para 14 variáveis, em duas etapas objetivas, e com 14 mais o território ele prevê melhor do que com as 41.
+> Três passos. Curadoria: de 41 para 14 variáveis, e com o território ele prevê melhor do que com as 41.
 >
 > Escolha: três famílias comparadas pelo critério declarado antes de rodar. Venceu a random forest.
 >
@@ -85,7 +93,7 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 ---
 
-## Slide 6 · As cinco respostas — 1:36  ⟵ principal
+## Slide 6 · As cinco respostas — 1:13  ⟵ principal
 
 **[clicar em FATORES] (0:16)**
 
@@ -103,23 +111,23 @@ As marcações **[clicar em X]** são as ações no deck durante a narração. N
 
 > Como prever os próximos ciclos. A probabilidade vem em faixas com confiabilidade conhecida: das redes com até 25% de chance, 89% não cumpriram; acima de 75%, só 9%. Isso permite dosar, intervir onde o aviso é firme e acompanhar onde ainda pode virar.
 
-**[clicar em VARIÁVEIS] (0:15)**
+**[clicar em VARIÁVEIS] (0:09)**
 
-> E o que mais pesa no modelo é de onde a rede partiu: sem isso, ele cai para o nível do acaso. A inércia manda, e romper inércia é o trabalho da política.
+> E o que mais pesa no modelo é de onde a rede partiu: sem isso, ele cai ao nível do acaso. Romper inércia é o trabalho da política.
 
 *Entrega: respiro entre uma resposta e outra. Desacelerar em 60,45%, 89% e 9%.*
 
 ---
 
-## Slide 7 · O que o modelo não faz — 0:26
+## Slide 7 · O que o modelo não faz — 0:16
 
-> Três limites. Ele acerta 91% das redes que continuam onde estavam e 54% das que mudam de lado: é mais frágil onde a política age. Mostra associação, não causa. E enxerga o resultado, não o contexto: o Rio Grande do Sul aparece com muitas redes em risco em 2024, o ano das enchentes, e o modelo não sabe da enchente.
+> Três limites. Ele acerta 91% das permanências e 54% das mudanças: é mais frágil onde a política age. Mostra associação, não causa. E enxerga o resultado, não o contexto: o Rio Grande do Sul aparece cheio de redes em risco em 2024, e o modelo não sabe da enchente.
 
 *Entrega: ritmo mais ágil. O quarto cartão fica na tela sem ser lido.*
 
 ---
 
-## Slide 8 · Fecho — 0:19
+## Slide 8 · Fecho — 0:14
 
 > Fica uma lista nominal de redes ordenada por impacto, um mapa de onde o problema se concentra e uma régua de prioridade com confiabilidade medida. Repetindo o método a cada ciclo, dá para saber onde apoiar antes que o ano termine. Obrigado.
 
