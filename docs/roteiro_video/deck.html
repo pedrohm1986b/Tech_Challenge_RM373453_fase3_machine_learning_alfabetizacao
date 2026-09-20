@@ -480,15 +480,16 @@
       <div class="dnote"><b>Por que enriquecer.</b> O lake da fase anterior mede o indicador, mas traz quase só a resposta. Sem as fontes externas, a única variável explicativa seria a taxa do ano anterior: o modelo repetiria o passado, sem nada sobre o que um gestor possa agir.</div>
       <div class="dnote"><b>Por que 2024, e não 2025.</b> Um modelo supervisionado precisa de resposta observada no grão que prevê. O resultado de 2025 existe no agregado nacional, mas não por município e rede; na fase anterior, aquele ciclo entrava como <b>estimativa preliminar de eventos simulados</b>. O único par com resposta real é contexto de 2023 e resultado de 2024. Soma-se o alinhamento temporal: as fontes de enriquecimento são de 2021 a 2023, então 2024 é o ciclo em que explicação e resposta ficam mais próximas.</div>`},
 
-    eda:{name:'Análise exploratória',badge:'desenv_02 · hipóteses declaradas',bcls:'b-store',html:`
-      <div class="withshot"><div><ul class="dlist">
-        <li><b style="color:var(--text)">O teto já aparece aqui:</b> só 9,4% da variação do resultado está entre municípios; os outros 90,6% acontecem entre alunos do mesmo município</li>
-        <li><b style="color:var(--text)">A fronteira é estreita:</b> 32,4% dos alunos ficam a menos de 20 pontos do corte de 743 na escala Saeb, o que desqualifica a acurácia como métrica</li>
-        <li><b style="color:var(--text)">O território pesa e a média esconde:</b> 49,3 pontos de amplitude entre UFs, e a capital paulista alfabetiza 56,6%, menos que 7 em cada 10 municípios do estado</li>
-        <li><b style="color:var(--text)">A inércia é o preditor mais forte:</b> correlação de 0,665 entre as taxas municipais de 2023 e 2024, com o Rio Grande do Sul como exceção, 18,8 pontos abaixo no ano das enchentes</li>
-        <li><b style="color:var(--text)">Entre os fatores acionáveis, a pré-escola se destaca:</b> 18,9 pontos entre o primeiro e o último quintil de oferta</li>
-      </ul></div><figure class="shot"><img src="../../images/eda_mapa_alfabetizacao_uf.png" alt=""><figcaption>A desigualdade é territorial antes de ser escolar: mais de 30 pontos de amplitude entre as UFs · desenv_02</figcaption></figure></div>
-      <div class="dnote"><b>Por que declarar a hipótese antes.</b> Sem isso, qualquer resultado vira confirmação. Com a direção declarada, o sinal contrário ao esperado é evidência de problema, não descoberta. Das treze hipóteses, quatro se confirmaram, quatro em parte e três ficaram fracas ou não confirmadas; a inércia territorial entrou como referência, e não como alavanca.</div>`},
+    eda:{name:'Análise exploratória',badge:'desenv_02 · uma pergunta puxa a outra',bcls:'b-store',html:`
+      <p style="margin-bottom:10px">A exploração não foi um inventário de gráficos: foi uma <b style="color:var(--text)">cadeia de perguntas</b>, em que cada resposta determinou a seguinte e, no fim, o desenho da modelagem.</p>
+      <table class="dtab"><thead><tr><th>A pergunta</th><th>O que os dados mostraram</th><th>O que isso determinou</th></tr></thead><tbody>
+      <tr><td>Dá para distinguir duas crianças?</td><td><b style="color:var(--mag)">Não.</b> 90,6% da variação do resultado acontece entre alunos do mesmo município; só 9,4% entre municípios</td><td>o teto da tarefa, a ser medido na modelagem</td></tr>
+      <tr><td>Então como ler a resposta?</td><td>o corte de 743 pontos cai na parte mais densa das notas: 32,4% dos alunos ficam a menos de 20 pontos dele</td><td>ler por probabilidade; a acurácia mediria sorte</td></tr>
+      <tr><td>Se não é o aluno, o que tem sinal?</td><td>o território: 49,3 pontos entre UFs, e dentro do estado as cidades grandes puxam para baixo (a capital paulista alfabetiza 56,6%)</td><td>a unidade com sinal é a rede dentro do município</td></tr>
+      <tr><td>E o que explica o território?</td><td>ele mesmo, no ano anterior: correlação de 0,665 entre 2023 e 2024. A exceção é o Rio Grande do Sul, 18,8 pontos abaixo no ano das enchentes</td><td>a inércia entra como referência a superar, não como alavanca</td></tr>
+      <tr><td>O que sobra para a política?</td><td>entre os fatores acionáveis, a pré-escola se destaca: 18,9 pontos entre o primeiro e o último quintil de oferta</td><td>as alavancas serão medidas pelo que acrescentam à inércia</td></tr>
+      </tbody></table>
+      <div class="dnote"><b>Cada variável entrou com hipótese escrita antes da medição</b>, com a direção esperada: sem isso, qualquer resultado vira confirmação. Das treze hipóteses, quatro se confirmaram, quatro em parte e três ficaram fracas ou não confirmadas.</div>`},
 
     pipeline:{name:'Pipeline de pré-processamento',badge:'scikit-learn · sem vazamento',bcls:'b-batch',html:`
       <ul class="dlist">

@@ -142,15 +142,19 @@ A exploração (`desenv_02`) trabalhou o indicador no grão do município e do a
 
 ![Taxa de alfabetização por UF](images/eda_mapa_alfabetizacao_uf.png)
 
-Cinco achados orientaram as decisões seguintes:
+A exploração (`desenv_02`) não foi um inventário de gráficos: foi uma **cadeia de perguntas**, em que cada resposta determinou a seguinte e, no fim, o desenho da modelagem.
 
-- **O teto da tarefa já aparece aqui.** Apenas 9,4% da variação do resultado individual está entre municípios; os outros 90,6% acontecem entre alunos do mesmo município, fora do alcance desta base. Foi o primeiro sinal do limite que a primeira rodada de modelagem confirmaria;
-- **A fronteira da classificação é estreita.** O corte de 743 pontos na escala Saeb cai sobre a região mais densa das notas: 32,4% dos alunos estão a menos de 20 pontos dele. Daí a decisão de não usar acurácia como métrica principal;
-- **O território pesa, e a média esconde os casos.** A amplitude entre UFs chega a **49,3 pontos**, de 36,0% na Bahia a 85,3% no Ceará. E as cidades grandes puxam o resultado para baixo: a capital paulista, com 94 mil alunos, alfabetiza 56,6%, menos que 7 em cada 10 municípios do estado;
-- **O resultado anterior é o preditor mais forte.** A correlação entre as taxas municipais de 2023 e 2024 é de 0,665. O Rio Grande do Sul é a exceção, com queda mediana de 18,8 pontos em 2024, o ano das enchentes;
-- **Entre os fatores acionáveis, a pré-escola se destaca,** separando os alunos em 18,9 pontos entre o primeiro e o último quintil de oferta, bem à frente dos demais.
+**Dá para distinguir duas crianças?** Não. Apenas 9,4% da variação do resultado individual está entre municípios; os outros **90,6% acontecem entre alunos do mesmo município**, e nenhuma variável desta base alcança essa diferença. O teto da tarefa já estava ali, esperando para ser medido.
 
-> 📓 **Para o detalhe:** as distribuições, as associações e os cortes por rede e território estão no [`desenv_02`](notebooks/desenv_02_analise_exploratoria.ipynb).
+**Então como ler a resposta?** O corte de 743 pontos na escala Saeb cai sobre a região mais densa das notas: **32,4% dos alunos ficam a menos de 20 pontos dele**. Perto da linha, um erro pequeno troca o lado, e foi daí que veio a decisão de ler o modelo por probabilidade, e não por acurácia.
+
+**Se não é o aluno, o que tem sinal?** O território. A amplitude entre UFs chega a **49,3 pontos**, de 36,0% na Bahia a 85,3% no Ceará, e dentro do estado as cidades grandes puxam o resultado para baixo: a capital paulista, com 94 mil alunos, alfabetiza 56,6%, menos que 7 em cada 10 municípios paulistas. A unidade que carrega sinal é a rede dentro do município.
+
+**E o que explica o território?** Ele mesmo, no ano anterior: a correlação entre as taxas municipais de 2023 e 2024 é de **0,665**. A exceção confirma a leitura: o Rio Grande do Sul cai 18,8 pontos em 2024, o ano das enchentes. Por isso a inércia entrou como referência a superar, e não como alavanca de política.
+
+**O que sobra para a política?** Entre os fatores que um gestor move, a **oferta de pré-escola** se destaca, separando os alunos em 18,9 pontos entre o primeiro e o último quintil, bem à frente dos demais.
+
+Cada variável entrou com **hipótese declarada antes da medição**, com a direção esperada: sem isso, qualquer resultado vira confirmação. Das treze hipóteses, quatro se confirmaram, quatro em parte e três ficaram fracas ou não confirmadas.
 
 ![Distribuição da taxa municipal](images/eda_distribuicao_taxa_municipal.png)
 
