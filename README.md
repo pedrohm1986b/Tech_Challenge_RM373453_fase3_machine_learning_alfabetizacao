@@ -142,11 +142,13 @@ A exploração (`desenv_02`) trabalhou o indicador no grão do município e do a
 
 ![Taxa de alfabetização por UF](images/eda_mapa_alfabetizacao_uf.png)
 
-Três achados orientaram as decisões seguintes:
+Cinco achados orientaram as decisões seguintes:
 
-- **A desigualdade é territorial antes de ser escolar.** A amplitude entre UFs passa de 30 pontos percentuais, e o mapa separa com nitidez o Norte e o Nordeste do Centro-Oeste, do Sudeste e do Sul;
-- **A taxa municipal depende do cálculo.** A média das taxas municipais e a taxa entre todos os alunos divergem, porque as cidades grandes pesam mais na segunda. Isso justificou usar o peso do INEP no alvo;
-- **As associações são fracas e não lineares no grão do aluno,** o que já antecipava o teto medido na primeira rodada de modelagem.
+- **O teto da tarefa já aparece aqui.** Apenas 9,4% da variação do resultado individual está entre municípios; os outros 90,6% acontecem entre alunos do mesmo município, fora do alcance desta base. Foi o primeiro sinal do limite que a primeira rodada de modelagem confirmaria;
+- **A fronteira da classificação é estreita.** O corte de 743 pontos na escala Saeb cai sobre a região mais densa das notas: 32,4% dos alunos estão a menos de 20 pontos dele. Daí a decisão de não usar acurácia como métrica principal;
+- **O território pesa, e a média esconde os casos.** A amplitude entre UFs chega a **49,3 pontos**, de 36,0% na Bahia a 85,3% no Ceará. E as cidades grandes puxam o resultado para baixo: a capital paulista, com 94 mil alunos, alfabetiza 56,6%, menos que 7 em cada 10 municípios do estado;
+- **O resultado anterior é o preditor mais forte.** A correlação entre as taxas municipais de 2023 e 2024 é de 0,665. O Rio Grande do Sul é a exceção, com queda mediana de 18,8 pontos em 2024, o ano das enchentes;
+- **Entre os fatores acionáveis, a pré-escola se destaca,** separando os alunos em 18,9 pontos entre o primeiro e o último quintil de oferta, bem à frente dos demais.
 
 > 📓 **Para o detalhe:** as distribuições, as associações e os cortes por rede e território estão no [`desenv_02`](notebooks/desenv_02_analise_exploratoria.ipynb).
 

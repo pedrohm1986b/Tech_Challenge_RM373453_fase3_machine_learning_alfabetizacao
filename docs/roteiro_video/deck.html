@@ -482,12 +482,13 @@
 
     eda:{name:'Análise exploratória',badge:'desenv_02 · hipóteses declaradas',bcls:'b-store',html:`
       <div class="withshot"><div><ul class="dlist">
-        <li>A desigualdade é territorial antes de ser escolar: mais de 30 pontos de amplitude entre UFs</li>
-        <li>A taxa municipal depende do cálculo — média das taxas ou taxa entre alunos, com o peso do INEP</li>
-        <li>As associações no grão do aluno são fracas e não lineares, o que já antecipava o teto da tarefa</li>
-        <li>Cada variável candidata entra com <b style="color:var(--text)">hipótese escrita antes</b> da medição, com a direção esperada</li>
+        <li><b style="color:var(--text)">O teto já aparece aqui:</b> só 9,4% da variação do resultado está entre municípios; os outros 90,6% acontecem entre alunos do mesmo município</li>
+        <li><b style="color:var(--text)">A fronteira é estreita:</b> 32,4% dos alunos ficam a menos de 20 pontos do corte de 743 na escala Saeb, o que desqualifica a acurácia como métrica</li>
+        <li><b style="color:var(--text)">O território pesa e a média esconde:</b> 49,3 pontos de amplitude entre UFs, e a capital paulista alfabetiza 56,6%, menos que 7 em cada 10 municípios do estado</li>
+        <li><b style="color:var(--text)">A inércia é o preditor mais forte:</b> correlação de 0,665 entre as taxas municipais de 2023 e 2024, com o Rio Grande do Sul como exceção, 18,8 pontos abaixo no ano das enchentes</li>
+        <li><b style="color:var(--text)">Entre os fatores acionáveis, a pré-escola se destaca:</b> 18,9 pontos entre o primeiro e o último quintil de oferta</li>
       </ul></div><figure class="shot"><img src="../../images/eda_mapa_alfabetizacao_uf.png" alt=""><figcaption>A desigualdade é territorial antes de ser escolar: mais de 30 pontos de amplitude entre as UFs · desenv_02</figcaption></figure></div>
-      <div class="dnote"><b>Por que declarar a hipótese antes.</b> Sem isso, qualquer resultado vira confirmação. Com a direção declarada, o sinal contrário ao esperado é evidência de problema, não descoberta.</div>`},
+      <div class="dnote"><b>Por que declarar a hipótese antes.</b> Sem isso, qualquer resultado vira confirmação. Com a direção declarada, o sinal contrário ao esperado é evidência de problema, não descoberta. Das treze hipóteses, quatro se confirmaram, quatro em parte e três ficaram fracas ou não confirmadas; a inércia territorial entrou como referência, e não como alavanca.</div>`},
 
     pipeline:{name:'Pipeline de pré-processamento',badge:'scikit-learn · sem vazamento',bcls:'b-batch',html:`
       <ul class="dlist">
