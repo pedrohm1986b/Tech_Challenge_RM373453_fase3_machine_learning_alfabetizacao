@@ -1,0 +1,5 @@
+,auc,log_loss,brier,auc_redes_20_alunos_ou_mais
+constante,0.5,0.68334,0.24511,0.5
+só a taxa de 2023,0.76867,0.56935,0.19216,0.7923
+sem território,0.87657,0.43772,0.14171,0.88619
+modelo final,0.88564,0.41693,0.13593,0.89483

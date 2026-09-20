@@ -1,0 +1,12 @@
+variavel,nome,quem,sinal,motivo,pasta,baixo,alto,efeito_pp,regioes
+mun_indice_pre_escola,Oferta de pré-escola,educação,+,quem passou pela pré-escola chega ao 1º ano familiarizado com letras e sons,,0.84,0.98,1.4331,5
+esc_pct_biblioteca_ou_sala_leitura,Escolas com biblioteca,educação,+,dá acesso a livros fora da sala de aula,,26.3,75.0,0.8877,5
+esc_pct_docentes_alto_esforco,Professores sobrecarregados,educação,-,sobra menos tempo para cada turma,,0.0,7.7,-0.6863,4
+esc_pct_quadra,Escolas com quadra,educação,+,indica escola com estrutura completa,,14.2,50.0,0.3854,4
+esc_horas_aula_diarias,Horas-aula por dia,educação,+,mais tempo de aula dá mais contato com a leitura,,4.2,5.1,0.3769,4
+mun_pct_maes_adolescentes,Mães adolescentes,outra pasta,-,"mãe adolescente tem, em média, menos escolaridade e menos apoio",saúde e assistência social,14.3,23.2,-3.2891,5
+esc_inse_medio,Nível socioeconômico das famílias,outra pasta,+,"famílias com mais escolaridade e renda apoiam mais a leitura; é alavanca de prazo longo, porque a política de renda muda a família antes de mudar o indicador",assistência social e renda,4.44,5.25,2.3125,5
+mun_idade_mediana,Idade mediana da população,outra pasta,+,"população mais jovem indica fecundidade alta, com mais crianças por família e gravidez precoce, e expectativa de vida menor, por mortes violentas e problemas de saúde",saúde e segurança pública,33.0,38.0,1.6639,5
+mun_pct_vulner_deslocamento_1h,Pobres com mais de 1 hora de deslocamento,outra pasta,-,"longos deslocamentos cansam a família; o dado é de 2010 e aponta o problema, mas está velho para medir a situação atual",mobilidade e transporte,0.3,1.83,-1.5101,5
+mun_densidade_demografica,Densidade demográfica,outra pasta,+,"com a população concentrada, a escola fica mais perto; a densidade não muda, mas a distância que ela representa se trata com a localização das escolas e o transporte",planejamento urbano e transporte,11.9,58.3,0.511,4
+mun_populacao,População do município,território,?,porte pode trazer estrutura ou complexidade,,5868.0,28666.0,-3.4512,5
