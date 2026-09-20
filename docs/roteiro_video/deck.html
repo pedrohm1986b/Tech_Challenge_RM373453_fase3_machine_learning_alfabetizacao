@@ -192,26 +192,18 @@
     <div class="bg-grid"></div>
     <div class="glow" style="width:500px;height:500px;background:var(--cyan);top:-100px;right:0"></div>
     <div class="kicker">Contexto · a necessidade</div>
-    <div class="ctx-grid">
-      <div>
-        <div class="stat-huge">59,2%</div>
-        <div class="lead" style="margin-top:10px">das crianças da rede pública alfabetizadas ao fim do 2º ano em 2024 — contra a meta pactuada de <b class="w">59,9%</b>. Faltaram sete décimos de ponto.</div>
-        <div class="metas">
-          <span class="num lo">59,9%<small>meta 2024</small></span>
-          <span class="bar"></span>
-          <span class="num hi">80%<small>meta 2030</small></span>
-        </div>
-        <div class="q-box">
-          <div class="q">"Quais redes chegam à meta, e quais precisam de apoio para chegar?"</div>
-          <div class="a">a média nacional não diz onde agir; o resultado só sai quando o ciclo já acabou.</div>
-        </div>
-        <div class="lead" style="margin-top:18px;font-size:clamp(13px,1.15vw,15px)">O ciclo modelado é <b class="w">2024</b>: o resultado de 2025 saiu no agregado nacional, mas ainda não existe taxa observada por município e rede, que é o grão deste modelo.</div>
-      </div>
-      <figure class="shot">
-        <img src="../../images/eda_mapa_alfabetizacao_uf.png" alt="Taxa de alfabetização por UF">
-        <figcaption>A média esconde 30 pontos de amplitude entre as UFs · desenv_02</figcaption>
-      </figure>
+    <div class="stat-huge">59,2%</div>
+    <div class="lead" style="margin-top:10px">das crianças da rede pública alfabetizadas ao fim do 2º ano em 2024 — contra a meta pactuada de <b class="w">59,9%</b>. Faltaram sete décimos de ponto.</div>
+    <div class="metas">
+      <span class="num lo">59,9%<small>meta 2024</small></span>
+      <span class="bar"></span>
+      <span class="num hi">80%<small>meta 2030</small></span>
     </div>
+    <div class="q-box">
+      <div class="q">"Quais redes chegam à meta, e quais precisam de apoio para chegar?"</div>
+      <div class="a">a média nacional não diz onde agir; o resultado só sai quando o ciclo já acabou.</div>
+    </div>
+    <div class="lead" style="margin-top:20px;font-size:clamp(13px,1.15vw,15px)">O ciclo modelado é <b class="w">2024</b>: o resultado de 2025 saiu no agregado nacional, mas ainda não existe por município e rede, que é o grão deste modelo.</div>
   </section>
 
   <!-- 2 · PIPELINE DE DESENVOLVIMENTO (interativa) -->
@@ -494,7 +486,7 @@
         <li>A taxa municipal depende do cálculo — média das taxas ou taxa entre alunos, com o peso do INEP</li>
         <li>As associações no grão do aluno são fracas e não lineares, o que já antecipava o teto da tarefa</li>
         <li>Cada variável candidata entra com <b style="color:var(--text)">hipótese escrita antes</b> da medição, com a direção esperada</li>
-      </ul></div><figure class="shot"><img src="../../images/eda_distribuicao_taxa_municipal.png" alt=""><figcaption>Distribuição da taxa municipal · desenv_02</figcaption></figure></div>
+      </ul></div><figure class="shot"><img src="../../images/eda_mapa_alfabetizacao_uf.png" alt=""><figcaption>A desigualdade é territorial antes de ser escolar: mais de 30 pontos de amplitude entre as UFs · desenv_02</figcaption></figure></div>
       <div class="dnote"><b>Por que declarar a hipótese antes.</b> Sem isso, qualquer resultado vira confirmação. Com a direção declarada, o sinal contrário ao esperado é evidência de problema, não descoberta.</div>`},
 
     pipeline:{name:'Pipeline de pré-processamento',badge:'scikit-learn · sem vazamento',bcls:'b-batch',html:`
